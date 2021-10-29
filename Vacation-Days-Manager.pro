@@ -15,18 +15,18 @@ SOURCES += \
     mainwindow.cpp \
     models/test.cpp \
     tab_widgets/Users.cpp \
+    util/DB_Functions.cpp \
     util/HelperFunctions.cpp \
-    util/appconsts.cpp \
-    util/initdb.cpp
+    util/appconsts.cpp
 
 HEADERS += \
     custom_widgets/CustomTableView.h \
     dialogs/AddEditUser.h \
     mainwindow.h \
     tab_widgets/Users.h \
+    util/DB_Functions.h \
     util/HelperFunctions.h \
-    util/appconsts.h \
-    util/initdb.h
+    util/appconsts.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

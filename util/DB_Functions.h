@@ -1,5 +1,5 @@
-#ifndef INITDB_H
-#define INITDB_H
+#ifndef DB_FUNCTIONS_H
+#define DB_FUNCTIONS_H
 
 
 class DB_Functions
@@ -14,4 +14,4 @@ private:
     static void fillUserRoles();
 };
 
-#endif // INITDB_H
+#endif // DB_FUNCTIONS_H
