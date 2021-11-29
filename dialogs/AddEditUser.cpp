@@ -10,7 +10,7 @@
 #include <QComboBox>
 #include <QSqlQueryModel>
 #include <QMessageBox>
-
+#include <QDebug>
 
 #include "util/HelperFunctions.h"
 
