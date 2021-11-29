@@ -15,8 +15,8 @@ static const char* CREATE_USERS = "CREATE TABLE users ( "
                                   "work_email varchar(256) UNIQUE, "
                                   "date_birth date, "
                                   "date_employment date, "
-                                  "user_role_id integer, "
-                                  "gender_id integer, "
+                                  "user_role_id integer NOT NULL, "
+                                  "gender_id integer NOT NULL, "
                                   "CONSTRAINT users_pkey PRIMARY KEY (id), "
                                   "CONSTRAINT fk_user_role_id FOREIGN KEY (user_role_id) "
                                   "    REFERENCES public.user_roles (id) MATCH SIMPLE "
@@ -42,7 +42,7 @@ static const char* FILL_GENDERS = "INSERT INTO genders(\"id\", \"name\") VALUES 
                                   "INSERT INTO genders(\"id\", \"name\") VALUES (2, 'Female');";
 
 static const char* FILL_USER_ROLES = "INSERT INTO user_roles(\"id\", \"role_name\") VALUES (1, 'Admin');"
-                                     "INSERT INTO genders(\"id\", \"role_name\") VALUES (2, 'User');";
+                                     "INSERT INTO user_roles(\"id\", \"role_name\") VALUES (2, 'User');";
 
 }
 
