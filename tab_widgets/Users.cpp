@@ -1,18 +1,12 @@
 #include "Users.h"
 
-#include <QLayout>
-#include <QPushButton>
 #include <QSqlQuery>
 #include <QSqlQueryModel>
-#include <QToolBar>
 
 #include "custom_widgets/CustomTableView.h"
 #include "dialogs/AddEditUser.h"
 
 namespace Users_NS {
-static const char* ADD = "Add";
-static const char* MODIFY = "Modify";
-static const char* DELETE = "Delete";
 static const char* FIRST_NAME = "First name";
 static const char* LAST_NAME = "Last name";
 static const char* PERSONAL_EMAIL ="Personal email";
@@ -33,30 +27,15 @@ static const char* DELETE_USER_QUERY = "DELETE FROM users WHERE id = :userId";
 
 using namespace Users_NS;
 
-Users::Users(QWidget *parent) : QWidget(parent)
+Users::Users(QWidget *parent)
+    : CustomTabWidget(parent)
 {
-    setupUi();
+    setupModelView();
 }
 
-void Users::setupUi()
+void Users::setupModelView()
 {
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    QHBoxLayout *toolBarLayout = new QHBoxLayout();
-    QHBoxLayout *tableLayout = new QHBoxLayout();
-
-    QToolBar *tb = new QToolBar(this);
-
-    m_pbAdd = new QPushButton(ADD, this);
-    m_pbModify = new QPushButton(MODIFY, this);
-    m_pbDelete = new QPushButton(DELETE, this);
-
-    tb->addWidget(m_pbAdd);
-    tb->addWidget(m_pbModify);
-    tb->addWidget(m_pbDelete);
-
-    m_model = new QSqlQueryModel(this);
     m_model->setQuery(MODEL_QUERY);
-    m_table = new CustomTableView(this);
     m_table->setModel(m_model);
 
     m_model->setHeaderData(firstName, Qt::Horizontal, FIRST_NAME);
@@ -67,33 +46,35 @@ void Users::setupUi()
     m_model->setHeaderData(dateEmployment, Qt::Horizontal, DATE_EMPLOYMENT);
     m_model->setHeaderData(gender, Qt::Horizontal, GENDER);
     m_model->setHeaderData(roleName, Qt::Horizontal, ROLE_NAME);
-
-    toolBarLayout->addWidget(tb);
-    tableLayout->addWidget(m_table);
-
-    mainLayout->addLayout(toolBarLayout);
-    mainLayout->addLayout(tableLayout);
-
-    connect(m_pbAdd, &QPushButton::clicked, this, [this] {
-       AddEditUser *dlg = new AddEditUser(this);
-       dlg->exec();
-    });
-
-    connect(m_pbModify, &QPushButton::clicked, this, [this] {
-        AddEditUser *dlg = new AddEditUser(this, m_model->index(m_table->currentIndex().row(), Users_NS::id).data().toInt());
-        connect(dlg, &QDialog::accepted, this, [this] {
-            m_model->setQuery(MODEL_QUERY);
-        });
-
-        dlg->exec();
-    });
-
-    connect(m_pbDelete, &QPushButton::clicked, this, [this] {
-       QSqlQuery q;
-       q.prepare(DELETE_USER_QUERY);
-       q.bindValue(":userId", m_model->index(m_table->currentIndex().row(), Users_NS::id).data().toInt());
-       q.exec();
-
-       m_model->setQuery(MODEL_QUERY);
-    });
 }
+
+void Users::addClicked()
+{
+    AddEditUser *dlg = new AddEditUser(this);
+    connect(dlg, &QDialog::accepted, this, [this] {
+        m_model->setQuery(MODEL_QUERY);
+    });
+    dlg->exec();
+}
+
+void Users::modifyClicked()
+{
+    AddEditUser *dlg = new AddEditUser(this, m_model->index(m_table->currentIndex().row(), Users_NS::id).data().toInt());
+    connect(dlg, &QDialog::accepted, this, [this] {
+        m_model->setQuery(MODEL_QUERY);
+    });
+
+    dlg->exec();
+}
+
+void Users::deleteClicked()
+{
+    QSqlQuery q;
+    q.prepare(DELETE_USER_QUERY);
+    q.bindValue(":userId", m_model->index(m_table->currentIndex().row(), Users_NS::id).data().toInt());
+    q.exec();
+
+    m_model->setQuery(MODEL_QUERY);
+}
+
+

@@ -1,11 +1,7 @@
 #ifndef USERS_H
 #define USERS_H
 
-#include <QWidget>
-
-class QPushButton;
-class QSqlQueryModel;
-class CustomTableView;
+#include "custom_widgets/CustomTabWidget.h"
 
 namespace Users_NS {
 enum EUserColumns {
@@ -21,23 +17,19 @@ enum EUserColumns {
 };
 }
 
-class Users : public QWidget
+class Users : public CustomTabWidget
 {
     Q_OBJECT
 public:
     explicit Users(QWidget *parent = nullptr);
 
 private:
-    void setupUi();
+    void setupModelView();
 
-    QPushButton *m_pbAdd;
-    QPushButton *m_pbModify;
-    QPushButton *m_pbDelete;
-
-    QSqlQueryModel *m_model;
-    CustomTableView *m_table;
-
-signals:
+private slots:
+    void addClicked();
+    void modifyClicked();
+    void deleteClicked();
 
 };
 

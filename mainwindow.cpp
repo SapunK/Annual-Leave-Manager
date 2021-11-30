@@ -7,6 +7,7 @@
 
 #include "util/HelperFunctions.h"
 #include "tab_widgets/Users.h"
+#include "tab_widgets/VacationDays.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -25,7 +26,9 @@ void MainWindow::setupUi()
     QVBoxLayout *layout = new QVBoxLayout(mainWidget);
 
     Users *usersWidget = new Users(this);
+    VacationDays *vacationDays = new VacationDays(this);
     tabWidget->addTab(usersWidget, "Users");
+    tabWidget->addTab(vacationDays, "Vacation days");
 
     layout->addWidget(tabWidget);
 

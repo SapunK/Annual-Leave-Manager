@@ -9,21 +9,25 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    custom_widgets/CustomTabWidget.cpp \
     custom_widgets/CustomTableView.cpp \
     dialogs/AddEditUser.cpp \
     main.cpp \
     mainwindow.cpp \
     models/test.cpp \
     tab_widgets/Users.cpp \
+    tab_widgets/VacationDays.cpp \
     util/DB_Functions.cpp \
     util/HelperFunctions.cpp \
     util/appconsts.cpp
 
 HEADERS += \
+    custom_widgets/CustomTabWidget.h \
     custom_widgets/CustomTableView.h \
     dialogs/AddEditUser.h \
     mainwindow.h \
     tab_widgets/Users.h \
+    tab_widgets/VacationDays.h \
     util/DB_Functions.h \
     util/HelperFunctions.h \
     util/appconsts.h
