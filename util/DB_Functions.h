@@ -10,6 +10,7 @@ public:
 
 private:
     static void createUsers();
+    static void createVacDays();
     static void fillGenders();
     static void fillUserRoles();
 };

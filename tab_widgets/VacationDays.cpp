@@ -1,5 +1,23 @@
 #include "VacationDays.h"
 
+#include <QSqlQueryModel>
+#include <QSqlQuery>
+
+namespace VacationDays_NS {
+static const char* USER = "User";
+static const char* YEAR = "Year";
+static const char* DAYS = "Days";
+
+static const char* MODEL_QUERY = "SELECT u.first_name || ' ' || u.last_name, vd.year, vd.days "
+                                 "FROM vacation_days vd "
+                                 "INNER JOIN users u on u.id = vd.user_id "
+                                 "WHERE vd.year = :year;";
+static const char* DELETE_VD_QUERY = "";
+
+}
+
+using namespace VacationDays_NS;
+
 VacationDays::VacationDays(QWidget *parent)
     : CustomTabWidget(parent)
 {
@@ -8,7 +26,11 @@ VacationDays::VacationDays(QWidget *parent)
 
 void VacationDays::setupModelView()
 {
+    m_model->setQuery(MODEL_QUERY);
 
+    m_model->setHeaderData(user, Qt::Horizontal, USER);
+    m_model->setHeaderData(year, Qt::Horizontal, YEAR);
+    m_model->setHeaderData(days, Qt::Horizontal, DAYS);
 }
 
 void VacationDays::addClicked()

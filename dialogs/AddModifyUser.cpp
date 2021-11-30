@@ -1,4 +1,4 @@
-#include "AddEditUser.h"
+#include "AddModifyUser.h"
 
 #include <QFormLayout>
 #include <QLineEdit>
@@ -59,7 +59,7 @@ using namespace AddEditUser_NS;
 using namespace UserRoles_NS;
 using namespace Genders_NS;
 
-AddEditUser::AddEditUser(QWidget *parent, int userId) :
+AddModifyUser::AddModifyUser(QWidget *parent, int userId) :
     QDialog(parent),
     m_userId(userId)
 {
@@ -71,7 +71,7 @@ AddEditUser::AddEditUser(QWidget *parent, int userId) :
         fillUserInfo();
 }
 
-void AddEditUser::setupUi()
+void AddModifyUser::setupUi()
 {
     QFormLayout *mainLayout = new QFormLayout(this);
 
@@ -133,10 +133,10 @@ void AddEditUser::setupUi()
     mainLayout->addRow(lbGender, m_cbGender);
     mainLayout->addRow(m_pbSave);
 
-    connect(m_pbSave, &QPushButton::clicked, this, &AddEditUser::addUser);
+    connect(m_pbSave, &QPushButton::clicked, this, &AddModifyUser::addUser);
 }
 
-void AddEditUser::fillUserInfo()
+void AddModifyUser::fillUserInfo()
 {
     setWindowTitle(MODIFIED_WINDOW_TITLE);
 
@@ -161,7 +161,7 @@ void AddEditUser::fillUserInfo()
 
 }
 
-void AddEditUser::addUser()
+void AddModifyUser::addUser()
 {
     if(m_leUsername->text().isEmpty()) {
         QMessageBox::critical(this, ERROR, USERNAME_VALIDATION);

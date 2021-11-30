@@ -4,7 +4,7 @@
 #include <QSqlQueryModel>
 
 #include "custom_widgets/CustomTableView.h"
-#include "dialogs/AddEditUser.h"
+#include "dialogs/AddModifyUser.h"
 
 namespace Users_NS {
 static const char* FIRST_NAME = "First name";
@@ -36,7 +36,6 @@ Users::Users(QWidget *parent)
 void Users::setupModelView()
 {
     m_model->setQuery(MODEL_QUERY);
-    m_table->setModel(m_model);
 
     m_model->setHeaderData(firstName, Qt::Horizontal, FIRST_NAME);
     m_model->setHeaderData(lastName, Qt::Horizontal, LAST_NAME);
@@ -50,7 +49,7 @@ void Users::setupModelView()
 
 void Users::addClicked()
 {
-    AddEditUser *dlg = new AddEditUser(this);
+    AddModifyUser *dlg = new AddModifyUser(this);
     connect(dlg, &QDialog::accepted, this, [this] {
         m_model->setQuery(MODEL_QUERY);
     });
@@ -59,7 +58,7 @@ void Users::addClicked()
 
 void Users::modifyClicked()
 {
-    AddEditUser *dlg = new AddEditUser(this, m_model->index(m_table->currentIndex().row(), Users_NS::id).data().toInt());
+    AddModifyUser *dlg = new AddModifyUser(this, m_model->index(m_table->currentIndex().row(), Users_NS::id).data().toInt());
     connect(dlg, &QDialog::accepted, this, [this] {
         m_model->setQuery(MODEL_QUERY);
     });

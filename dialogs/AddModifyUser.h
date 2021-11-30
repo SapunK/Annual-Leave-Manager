@@ -1,5 +1,5 @@
-#ifndef ADDEDITUSER_H
-#define ADDEDITUSER_H
+#ifndef ADDMODIFYUSER_H
+#define ADDMODIFYUSER_H
 
 #include <QDialog>
 
@@ -21,8 +21,7 @@ namespace AddEditUser_NS {
 enum EUserTableColumns{
     userName,
     password,
-    firstName, /*SELECT username, password, first_name, last_name, personal_email, work_email, "
-                                 "date_birth, date_employment, user_role_id, gender_id*/
+    firstName,
     lastName,
     personalEmail,
     workEmail,
@@ -37,10 +36,10 @@ class QLineEdit;
 class QDateEdit;
 class QComboBox;
 
-class AddEditUser : public QDialog
+class AddModifyUser : public QDialog
 {
 public:
-    explicit AddEditUser(QWidget *parent, int userId = -1);
+    explicit AddModifyUser(QWidget *parent, int userId = -1);
 
 private:
     void setupUi();
@@ -68,4 +67,4 @@ private slots:
     void addUser();
 };
 
-#endif // ADDEDITUSER_H
+#endif // ADDMODIFYUSER_H
