@@ -2,6 +2,7 @@
 
 #include <QSqlQuery>
 #include <QSqlQueryModel>
+#include <QPushButton>
 
 #include "custom_widgets/CustomTableView.h"
 #include "dialogs/AddEditUser.h"
@@ -37,6 +38,12 @@ void Users::setupModelView()
 {
     m_model->setQuery(MODEL_QUERY);
     m_table->setModel(m_model);
+    m_table->hideColumn(id);
+
+    connect(m_table->selectionModel(), &QItemSelectionModel::selectionChanged, this, [this] {
+       m_pbDelete->setEnabled(true);
+       m_pbModify->setEnabled(true);
+    });
 
     m_model->setHeaderData(firstName, Qt::Horizontal, FIRST_NAME);
     m_model->setHeaderData(lastName, Qt::Horizontal, LAST_NAME);

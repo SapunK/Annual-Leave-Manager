@@ -15,8 +15,8 @@
 #include "util/HelperFunctions.h"
 
 namespace AddEditUser_NS {
-static const char* WINDOW_TITLE = "Add user";
-static const char* MODIFIED_WINDOW_TITLE = "Modify user";
+static const char* ADD_TITLE = "Add user";
+static const char* MODIFY_TITLE = "Modify user";
 
 static const char* USERNAME = "Username";
 static const char* PASSWORD = "Password";
@@ -34,7 +34,7 @@ static const char* USERNAME_VALIDATION = "Username can't be empty";
 static const char* FIRST_NAME_VALIDATION = "First name can't be empty";
 static const char* LAST_NAME_VALIDATION = "Last name can't be empty";
 static const char* PASSWORD_VALIDATION = "Password can't be empty";
-static const char* WORKING_EMAIL_VALIDATION = "Working email can't be empty";
+static const char* WORK_EMAIL_VALIDATION = "Working email can't be empty";
 
 static const char* DATE_FORMAT = "dd.MM.yyyy";
 
@@ -63,7 +63,7 @@ AddEditUser::AddEditUser(QWidget *parent, int userId) :
     QDialog(parent),
     m_userId(userId)
 {
-    setWindowTitle(WINDOW_TITLE);
+    setWindowTitle(m_userId > 0 ? MODIFY_TITLE : ADD_TITLE);
     setMinimumSize(HelperFunctions::desktopWidth() * 0.25, HelperFunctions::desktopWidth() * 0.15);
     setupUi();
 
@@ -98,11 +98,15 @@ void AddEditUser::setupUi()
     m_deDateBirth = new QDateEdit(this);
     m_deDateBirth->setCalendarPopup(true);
     m_deDateBirth->setDisplayFormat(DATE_FORMAT);
+    if(m_userId > 0)
+        m_deDateBirth->setDisabled(true);
 
     QLabel *lbDateEmployment = new QLabel(DATE_EMPLOYMENT ,this);
     m_deDateEmployment = new QDateEdit(this);
     m_deDateEmployment->setCalendarPopup(true);
     m_deDateEmployment->setDisplayFormat(DATE_FORMAT);
+    if(m_userId > 0)
+        m_deDateEmployment->setDisabled(true);
 
     QLabel *lbUserRole = new QLabel(USER_ROLE, this);
     m_cbUserRole = new QComboBox(this);
@@ -111,13 +115,15 @@ void AddEditUser::setupUi()
     userRoleModel->setQuery(USER_ROLES_QUERY);
     m_cbUserRole->setModel(userRoleModel);
 
-
     QLabel *lbGender = new QLabel(GENDER_ID, this);
     m_cbGender = new QComboBox(this);
+    if(m_userId > 0)
+        m_cbGender->setDisabled(true);
 
     QSqlQueryModel *gendersModel =  new QSqlQueryModel(this);
     gendersModel->setQuery(GENDER_QUERY);
     m_cbGender->setModel(gendersModel);
+
 
     m_pbSave = new QPushButton(SAVE, this);
 
@@ -138,7 +144,7 @@ void AddEditUser::setupUi()
 
 void AddEditUser::fillUserInfo()
 {
-    setWindowTitle(MODIFIED_WINDOW_TITLE);
+   // setWindowTitle(MODIFY_TITLE);
 
     QSqlQuery q;
     q.prepare(SELECT_USER);
@@ -152,11 +158,17 @@ void AddEditUser::fillUserInfo()
     m_leLastName->setText(q.value(EUserTableColumns::lastName).toString());
     m_lePersonalEmail->setText(q.value(EUserTableColumns::personalEmail).toString());
     m_leWorkEmail->setText(q.value(EUserTableColumns::workEmail).toString());
+    m_deDateBirth->setDate(q.value(EUserTableColumns::dateBirth).toDate());
 
     for(int i = 0 ; i < m_cbUserRole->model()->rowCount() ; i++) {
         if(m_cbUserRole->model()->index(i, UserRoles_NS::id).data().toInt() == q.value(EUserTableColumns::userRoleId).toInt())
             m_cbUserRole->setCurrentIndex(m_cbUserRole->findText(m_cbUserRole->model()->index(i, UserRoles_NS::roleName).data().toString()));
     }
+    for(int i = 0 ; i <m_cbGender->model()->rowCount() ; i++){
+        if(m_cbGender->model()->index(i, Genders_NS::id).data().toInt() == q.value(EUserTableColumns::genderId).toInt())
+            m_cbGender->setCurrentIndex(m_cbGender->findText(m_cbGender->model()->index(i, Genders_NS::name).data().toString()));
+    }
+
 
 
 }
@@ -184,7 +196,7 @@ void AddEditUser::addUser()
     }
 
     if(m_leWorkEmail->text().isEmpty()){
-        QMessageBox::critical(this, ERROR, WORKING_EMAIL_VALIDATION);
+        QMessageBox::critical(this, ERROR, WORK_EMAIL_VALIDATION);
         return;
     }
 
@@ -213,7 +225,7 @@ void AddEditUser::addUser()
 
     if(!q.exec()) {
         qCritical()<<"Add user query error: "<<q.lastError()<<" last query: "<<q.lastQuery();
-        //QMessageBox error
+        //QMessageBox
     } else {
         QDialog::accept();
     }

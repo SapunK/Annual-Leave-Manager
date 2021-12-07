@@ -36,7 +36,9 @@ void CustomTabWidget::setupUi()
 
     m_pbAdd = new QPushButton(ADD, this);
     m_pbModify = new QPushButton(MODIFY, this);
+    m_pbModify->setDisabled(true);
     m_pbDelete = new QPushButton(DELETE, this);
+    m_pbDelete->setDisabled(true);
 
     tb->addWidget(m_pbAdd);
     tb->addWidget(m_pbModify);
