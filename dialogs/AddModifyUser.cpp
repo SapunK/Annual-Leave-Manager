@@ -1,4 +1,4 @@
-#include "AddEditUser.h"
+#include "AddModifyUser.h"
 
 #include <QFormLayout>
 #include <QLineEdit>
@@ -30,6 +30,7 @@ static const char* USER_ROLE = "User Role";
 static const char* GENDER_ID = "Gender";
 static const char* ERROR = "Error";
 static const char* SAVE = "Save";
+static const char* CANCEL = "Cancel";
 static const char* USERNAME_VALIDATION = "Username can't be empty";
 static const char* FIRST_NAME_VALIDATION = "First name can't be empty";
 static const char* LAST_NAME_VALIDATION = "Last name can't be empty";
@@ -59,7 +60,7 @@ using namespace AddEditUser_NS;
 using namespace UserRoles_NS;
 using namespace Genders_NS;
 
-AddEditUser::AddEditUser(QWidget *parent, int userId) :
+AddModifyUser::AddModifyUser(QWidget *parent, int userId) :
     QDialog(parent),
     m_userId(userId)
 {
@@ -71,7 +72,7 @@ AddEditUser::AddEditUser(QWidget *parent, int userId) :
         fillUserInfo();
 }
 
-void AddEditUser::setupUi()
+void AddModifyUser::setupUi()
 {
     QFormLayout *mainLayout = new QFormLayout(this);
 
@@ -124,8 +125,8 @@ void AddEditUser::setupUi()
     gendersModel->setQuery(GENDER_QUERY);
     m_cbGender->setModel(gendersModel);
 
-
     m_pbSave = new QPushButton(SAVE, this);
+    m_pbCancel = new QPushButton(CANCEL, this);
 
     mainLayout->addRow(lbUsername, m_leUsername);
     mainLayout->addRow(lbPassword, m_lePassword);
@@ -138,14 +139,14 @@ void AddEditUser::setupUi()
     mainLayout->addRow(lbUserRole, m_cbUserRole);
     mainLayout->addRow(lbGender, m_cbGender);
     mainLayout->addRow(m_pbSave);
+    mainLayout->addRow(m_pbCancel);
 
-    connect(m_pbSave, &QPushButton::clicked, this, &AddEditUser::addUser);
+    connect(m_pbSave, &QPushButton::clicked, this, &AddModifyUser::addUser);
+    connect(m_pbCancel, &QPushButton::clicked, this, &QDialog::reject);
 }
 
-void AddEditUser::fillUserInfo()
+void AddModifyUser::fillUserInfo()
 {
-   // setWindowTitle(MODIFY_TITLE);
-
     QSqlQuery q;
     q.prepare(SELECT_USER);
     q.bindValue(":userId", m_userId);
@@ -168,12 +169,9 @@ void AddEditUser::fillUserInfo()
         if(m_cbGender->model()->index(i, Genders_NS::id).data().toInt() == q.value(EUserTableColumns::genderId).toInt())
             m_cbGender->setCurrentIndex(m_cbGender->findText(m_cbGender->model()->index(i, Genders_NS::name).data().toString()));
     }
-
-
-
 }
 
-void AddEditUser::addUser()
+void AddModifyUser::addUser()
 {
     if(m_leUsername->text().isEmpty()) {
         QMessageBox::critical(this, ERROR, USERNAME_VALIDATION);

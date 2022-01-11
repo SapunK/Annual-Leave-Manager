@@ -2,10 +2,11 @@
 
 #include <QSqlQuery>
 #include <QSqlQueryModel>
+#include <QMessageBox>
 #include <QPushButton>
 
 #include "custom_widgets/CustomTableView.h"
-#include "dialogs/AddEditUser.h"
+#include "dialogs/AddModifyUser.h"
 
 namespace Users_NS {
 static const char* FIRST_NAME = "First name";
@@ -16,6 +17,9 @@ static const char* DATE_BIRTH = "Date birth";
 static const char* DATE_EMPLOYMENT = "Date employment";
 static const char* GENDER = "Gender";
 static const char* ROLE_NAME = "Role Name";
+
+static const char* DELETE_TITLE = "Delete user";
+static const char* DELETE_USER_MESSAGE = "Are you sure you want to delete this user";
 
 static const char* MODEL_QUERY = "SELECT u.first_name, u.last_name, u.personal_email, u.work_email, u.date_birth, "
                                  "u.date_employment, g.name, ur.role_name, u.id "
@@ -38,6 +42,7 @@ void Users::setupModelView()
 {
     m_model->setQuery(MODEL_QUERY);
     m_table->setModel(m_model);
+    m_table->resizeColumnsToContents();
     m_table->hideColumn(id);
 
     connect(m_table->selectionModel(), &QItemSelectionModel::selectionChanged, this, [this] {
@@ -57,7 +62,7 @@ void Users::setupModelView()
 
 void Users::addClicked()
 {
-    AddEditUser *dlg = new AddEditUser(this);
+    AddModifyUser *dlg = new AddModifyUser(this);
     connect(dlg, &QDialog::accepted, this, [this] {
         m_model->setQuery(MODEL_QUERY);
     });
@@ -66,7 +71,7 @@ void Users::addClicked()
 
 void Users::modifyClicked()
 {
-    AddEditUser *dlg = new AddEditUser(this, m_model->index(m_table->currentIndex().row(), Users_NS::id).data().toInt());
+    AddModifyUser *dlg = new AddModifyUser(this, m_model->index(m_table->currentIndex().row(), Users_NS::id).data().toInt());
     connect(dlg, &QDialog::accepted, this, [this] {
         m_model->setQuery(MODEL_QUERY);
     });
@@ -76,12 +81,14 @@ void Users::modifyClicked()
 
 void Users::deleteClicked()
 {
-    QSqlQuery q;
-    q.prepare(DELETE_USER_QUERY);
-    q.bindValue(":userId", m_model->index(m_table->currentIndex().row(), Users_NS::id).data().toInt());
-    q.exec();
+    if(QMessageBox::question(this, DELETE_TITLE, DELETE_USER_MESSAGE) == QMessageBox::Yes) {
+        QSqlQuery q;
+        q.prepare(DELETE_USER_QUERY);
+        q.bindValue(":userId", m_model->index(m_table->currentIndex().row(), Users_NS::id).data().toInt());
+        q.exec();
 
-    m_model->setQuery(MODEL_QUERY);
+        m_model->setQuery(MODEL_QUERY);
+    }
 }
 
 

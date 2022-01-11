@@ -1,5 +1,5 @@
-#ifndef ADDEDITUSER_H
-#define ADDEDITUSER_H
+#ifndef ADDMODIFYUSER_H
+#define ADDMODIFYUSER_H
 
 #include <QDialog>
 
@@ -36,10 +36,10 @@ class QLineEdit;
 class QDateEdit;
 class QComboBox;
 
-class AddEditUser : public QDialog
+class AddModifyUser : public QDialog
 {
 public:
-    explicit AddEditUser(QWidget *parent, int userId = -1);
+    explicit AddModifyUser(QWidget *parent, int userId = -1);
 
 private:
     void setupUi();
@@ -61,10 +61,11 @@ private:
     QComboBox *m_cbGender;
 
     QPushButton *m_pbSave;
+    QPushButton *m_pbCancel;
 
 private slots:
 
     void addUser();
 };
 
-#endif // ADDEDITUSER_H
+#endif // ADDMODIFYUSER_H

@@ -11,7 +11,8 @@ CONFIG += c++11
 SOURCES += \
     custom_widgets/CustomTabWidget.cpp \
     custom_widgets/CustomTableView.cpp \
-    dialogs/AddEditUser.cpp \
+    dialogs/AddModifyUser.cpp \
+    dialogs/AddModifyVacDays.cpp \
     main.cpp \
     mainwindow.cpp \
     models/test.cpp \
@@ -24,7 +25,8 @@ SOURCES += \
 HEADERS += \
     custom_widgets/CustomTabWidget.h \
     custom_widgets/CustomTableView.h \
-    dialogs/AddEditUser.h \
+    dialogs/AddModifyUser.h \
+    dialogs/AddModifyVacDays.h \
     mainwindow.h \
     tab_widgets/Users.h \
     tab_widgets/VacationDays.h \
