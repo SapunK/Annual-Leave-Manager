@@ -11,11 +11,13 @@ CONFIG += c++11
 SOURCES += \
     custom_widgets/CustomTabWidget.cpp \
     custom_widgets/CustomTableView.cpp \
+    dialogs/AddHoliday.cpp \
     dialogs/AddModifyUser.cpp \
     dialogs/AddModifyVacDays.cpp \
     main.cpp \
     mainwindow.cpp \
     models/test.cpp \
+    tab_widgets/Holidays.cpp \
     tab_widgets/Users.cpp \
     tab_widgets/VacationDays.cpp \
     util/DB_Functions.cpp \
@@ -25,9 +27,11 @@ SOURCES += \
 HEADERS += \
     custom_widgets/CustomTabWidget.h \
     custom_widgets/CustomTableView.h \
+    dialogs/AddHoliday.h \
     dialogs/AddModifyUser.h \
     dialogs/AddModifyVacDays.h \
     mainwindow.h \
+    tab_widgets/Holidays.h \
     tab_widgets/Users.h \
     tab_widgets/VacationDays.h \
     util/DB_Functions.h \

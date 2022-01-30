@@ -2,15 +2,20 @@
 #define ADDMODIFYVACDAYS_H
 
 #include <QDialog>
+\
+namespace AddModifyVacDays_NS {
 
-namespace AddEditVacDays{
 enum EVDTableColumn{
-    user,
+    userId,
     year,
     days
 };
-}
-namespace AddModifyVacDays_NS {
+
+enum EUserColumns{
+    user,
+    id
+};
+
 extern const char* USER;
 extern const char* YEAR;
 extern const char* DAYS;

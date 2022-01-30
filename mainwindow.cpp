@@ -8,12 +8,14 @@
 #include "util/HelperFunctions.h"
 #include "tab_widgets/Users.h"
 #include "tab_widgets/VacationDays.h"
+#include "tab_widgets/Holidays.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     HelperFunctions::setDesktopSize();
     setWindowState(Qt::WindowMaximized);
+    setMinimumSize(HelperFunctions::desktopWidth() * 0.5, HelperFunctions::desktopWidth() * 0.3);
 
     dbConnect();
     setupUi();
@@ -27,8 +29,10 @@ void MainWindow::setupUi()
 
     Users *usersWidget = new Users(this);
     VacationDays *vacationDays = new VacationDays(this);
+    Holidays *holidays = new Holidays(this);
     tabWidget->addTab(usersWidget, "Users");
     tabWidget->addTab(vacationDays, "Vacation days");
+    tabWidget->addTab(holidays, "Holidays");
 
     layout->addWidget(tabWidget);
 

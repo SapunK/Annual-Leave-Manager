@@ -3,15 +3,6 @@
 
 #include "custom_widgets/CustomTabWidget.h"
 
-namespace VacationDays_NS {
-enum EColumns {
-    user,
-    year,
-    days
-};
-
-}
-
 class VacationDays : public CustomTabWidget
 {
     Q_OBJECT
