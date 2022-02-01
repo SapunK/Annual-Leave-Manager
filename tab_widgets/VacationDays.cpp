@@ -14,6 +14,7 @@ namespace VacationDays_NS {
 static const char* USER = "User";
 static const char* DAYS = "Days";
 static const char* YEAR = "Year";
+                                 //da se proveri dali e dobro
 
 static const char* DELETE_TITLE = "Delete";
 static const char* DELETE_MSG = "Are you sure you want to delete";
@@ -50,9 +51,13 @@ void VacationDays::setupModelView()
         m_pbDelete->setEnabled(true);
     });
 
-    m_model->setHeaderData(id, Qt::Horizontal, USER);
+
+    m_model->setHeaderData(name, Qt::Horizontal, "Name");
     m_model->setHeaderData(year, Qt::Horizontal, YEAR);
     m_model->setHeaderData(days, Qt::Horizontal, DAYS);
+    m_model->setHeaderData(id, Qt::Horizontal, USER);
+
+
 }
 
 void VacationDays::addClicked()
@@ -64,17 +69,18 @@ void VacationDays::addClicked()
     dlg->exec();
 }
 
-//FIXME vacation days gi barame po vacation day id, a ne po user id
+//???
 void VacationDays::modifyClicked()
 {
     AddModifyVacDays *dlg = new AddModifyVacDays(this, m_model->index(m_table->currentIndex().row(), VacationDays_NS::id).data().toInt());
     connect(dlg, &QDialog::accepted, this, [this]{
         m_model->setQuery(MODEL_QUERY);
+
     });
     dlg->exec();
 }
 
-//FIXME brisheme po va
+//dobri li se?
 void VacationDays::deleteClicked()
 {
     if(QMessageBox::question(this, DELETE_TITLE, DELETE_MSG) == QMessageBox::Yes){
@@ -84,6 +90,6 @@ void VacationDays::deleteClicked()
         q.exec();
 
         m_model->setQuery(MODEL_QUERY);
-        m_pbDelete->setEnabled(m_table->currentIndex().isValid());
+        m_pbDelete->setEnabled(m_table->currentIndex().isValid());//ne go reshava problemot
     }
 }

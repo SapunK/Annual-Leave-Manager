@@ -6,8 +6,8 @@
 namespace VacationDays_NS {
 enum EVacDays{
     name,
-    days,
     year,
+    days,
     id
 };
 }

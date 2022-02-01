@@ -107,8 +107,8 @@ void AddModifyVacDays::saveVacDays()
     QSqlQuery q;
 
     q.prepare(INSERT_VD_QUERY);
-    q.bindValue(":year", m_sbYear->value());
     q.bindValue(":days", m_sbDays->value());
+    q.bindValue(":year", m_sbYear->value());
     q.bindValue(":user_id", m_cbUser->model()->index(m_cbUser->currentIndex(), EUserColumns::id).data().toInt());
 
     if(!q.exec()) {
