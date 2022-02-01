@@ -21,8 +21,8 @@ namespace AddHoliday_NS {
     static const char* CANCEL = "Cancel";
 
     static const char* SELECT_HOLIDAY = "SELECT id, date, description FROM holidays WHERE id = :holidayId;";
-    static const char* INSERT_HOLIDAY_QUERY = "INSERT INTO holidays (id, date, description) "
-                                              "VALUES (:id, :date, :description);";
+    static const char* INSERT_HOLIDAY_QUERY = "INSERT INTO holidays ( date, description) "
+                                              "VALUES (:date, :description);";
 
 }
 
@@ -56,6 +56,8 @@ void AddHoliday::setupUi()
 
     mainLayout->addRow(lbDescription, m_leDescription);
     mainLayout->addRow(lbDate, m_deDate);
+    mainLayout->addRow(m_pbSave);
+    mainLayout->addRow(m_pbCancel);
 
     connect(m_pbSave, &QPushButton::clicked, this, &AddHoliday::addHoliday);
     connect(m_pbCancel, &QPushButton::clicked, this, &QDialog::reject);
@@ -70,8 +72,8 @@ void AddHoliday::fillHolidayInfo()
     q.exec();
     q.next();
 
-    m_leDescription->setText(q.value(EHolidayColumn::description).toString());
-    m_deDate->setDate(q.value(EHolidayColumn::date).toDate());
+    m_leDescription->setText(q.value(EHolidayColumns::description).toString());
+    m_deDate->setDate(q.value(EHolidayColumns::date).toDate());
 }
 
 void AddHoliday::addHoliday()

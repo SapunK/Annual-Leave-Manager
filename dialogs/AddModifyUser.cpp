@@ -165,7 +165,7 @@ void AddModifyUser::fillUserInfo()
         if(m_cbUserRole->model()->index(i, UserRoles_NS::id).data().toInt() == q.value(EUserTableColumns::userRoleId).toInt())
             m_cbUserRole->setCurrentIndex(m_cbUserRole->findText(m_cbUserRole->model()->index(i, UserRoles_NS::roleName).data().toString()));
     }
-    for(int i = 0 ; i <m_cbGender->model()->rowCount() ; i++){
+    for(int i = 0 ; i < m_cbGender->model()->rowCount() ; i++){
         if(m_cbGender->model()->index(i, Genders_NS::id).data().toInt() == q.value(EUserTableColumns::genderId).toInt())
             m_cbGender->setCurrentIndex(m_cbGender->findText(m_cbGender->model()->index(i, Genders_NS::name).data().toString()));
     }

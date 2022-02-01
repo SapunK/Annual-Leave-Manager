@@ -17,7 +17,7 @@
 namespace AddModifyVacDays_NS {
 const char* USER = "User";
 const char* YEAR = "Year";
-const char* DAYS = "Days";
+const char* DAYS = "Days";// da se razgleda so boki
 
 static const char* SAVE = "Save";
 static const char* CANCEL = "Cancel";
@@ -103,6 +103,7 @@ void AddModifyVacDays::fillVdInfo()
 //TODO mozhe da ima validacija dali vo baza vekje ima record za toj user i godina
 void AddModifyVacDays::saveVacDays()
 {
+
     QSqlQuery q;
 
     q.prepare(INSERT_VD_QUERY);

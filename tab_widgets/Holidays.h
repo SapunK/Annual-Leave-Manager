@@ -5,6 +5,7 @@
 
 namespace Holiday_NS {
 enum EHolidayColumns{
+    id,
     date,
     description
 };

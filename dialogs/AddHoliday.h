@@ -4,7 +4,7 @@
 #include <QDialog>
 
 namespace AddHoliday_NS {
-enum EHolidayColumn{
+enum EHolidayColumns{
     date,
     description
 };
