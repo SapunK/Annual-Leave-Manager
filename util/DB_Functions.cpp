@@ -54,7 +54,7 @@ static const char* CREATE_HOLIDAYS = "CREATE TABLE holidays ( "
                                      "id integer NOT NULL, "
                                      "date date UNIQUE, "
                                      "description varchar(256) NOT NULL, "
-                                     "CONSTRAINT holidays_pkey PRIMARY KEY (id), "                                     
+                                     "CONSTRAINT holidays_pkey PRIMARY KEY (id) "
                                      ");";
 
 static const char* FILL_GENDERS = "INSERT INTO genders(\"id\", \"name\") VALUES (1, 'Male');"

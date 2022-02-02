@@ -75,6 +75,7 @@ void Users::modifyClicked()
     connect(dlg, &QDialog::accepted, this, [this] {
         m_model->setQuery(MODEL_QUERY);
         m_pbModify->setEnabled(m_table->currentIndex().isValid());
+        m_pbDelete->setEnabled(m_table->currentIndex().isValid());
     });
 
     dlg->exec();
@@ -89,6 +90,7 @@ void Users::deleteClicked()
         q.exec();
 
         m_model->setQuery(MODEL_QUERY);
+        m_pbModify->setEnabled(m_table->currentIndex().isValid());
         m_pbDelete->setEnabled(m_table->currentIndex().isValid());
     }
 }
