@@ -53,6 +53,8 @@ void Holidays::modifyClicked(){
     AddHoliday *dlg = new AddHoliday(this, m_model->index(m_table->currentIndex().row(), Holiday_NS::id).data().toInt());
     connect(dlg, &QDialog::accepted, this, [this]{
        m_model->setQuery(MODEL_QUERY);
+       m_pbDelete->setEnabled(m_table->currentIndex().isValid());
+       m_pbModify->setEnabled(m_table->currentIndex().isValid());
     });
 }
 
@@ -66,6 +68,7 @@ void Holidays::deleteClicked(){
 
         m_model->setQuery(MODEL_QUERY);
         m_pbDelete->setEnabled(m_table->currentIndex().isValid());
+        m_pbModify->setEnabled(m_table->currentIndex().isValid());
     }
 }
 
