@@ -76,6 +76,7 @@ void DB_Functions::createDatabase()
 {
     createUsers();
     createVacDays();
+    createHolidays();
 }
 
 void DB_Functions::createUsers()

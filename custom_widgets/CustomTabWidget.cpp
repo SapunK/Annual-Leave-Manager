@@ -7,6 +7,10 @@
 
 #include "custom_widgets/CustomTableView.h"
 
+#ifdef QT_DEBUG
+#include "util/DB_Functions.h"
+#endif
+
 namespace CustomTW_NS {
 static const char* ADD = "Add";
 static const char* MODIFY = "Modify";
@@ -43,6 +47,14 @@ void CustomTabWidget::setupUi()
     tb->addWidget(m_pbAdd);
     tb->addWidget(m_pbModify);
     tb->addWidget(m_pbDelete);
+
+#ifdef QT_DEBUG
+    QPushButton *pbCreateDb = new QPushButton("Create DB", this);
+    tb->addWidget(pbCreateDb);
+    connect(pbCreateDb, &QPushButton::clicked, this, [] {
+        DB_Functions::createDatabase();
+    });
+#endif
 
     m_model = new QSqlQueryModel(this);
     m_table = new CustomTableView(this);

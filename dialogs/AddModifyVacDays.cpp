@@ -10,6 +10,7 @@
 #include <QSqlQueryModel>
 #include <QDate>
 #include <QPushButton>
+#include <QDebug>
 
 #include "util/HelperFunctions.h"
 
@@ -17,7 +18,7 @@
 namespace AddModifyVacDays_NS {
 const char* USER = "User";
 const char* YEAR = "Year";
-const char* DAYS = "Days";// da se razgleda so boki
+const char* DAYS = "Days";
 
 static const char* SAVE = "Save";
 static const char* CANCEL = "Cancel";
@@ -112,7 +113,7 @@ void AddModifyVacDays::saveVacDays()
     q.bindValue(":user_id", m_cbUser->model()->index(m_cbUser->currentIndex(), EUserColumns::id).data().toInt());
 
     if(!q.exec()) {
-        qDebug()<<"Query not executed, error: " << q.lastError();
+        qCritical()<<"Query not executed, error: " << q.lastError();
         return;
     }
 
