@@ -36,7 +36,7 @@ void CustomTabWidget::setupUi()
     QHBoxLayout *toolBarLayout = new QHBoxLayout();
     QHBoxLayout *tableLayout = new QHBoxLayout();
 
-    QToolBar *tb = new QToolBar(this);
+    m_tb = new QToolBar(this);
 
     m_pbAdd = new QPushButton(ADD, this);
     m_pbModify = new QPushButton(MODIFY, this);
@@ -44,13 +44,13 @@ void CustomTabWidget::setupUi()
     m_pbDelete = new QPushButton(DELETE, this);
     m_pbDelete->setDisabled(true);
 
-    tb->addWidget(m_pbAdd);
-    tb->addWidget(m_pbModify);
-    tb->addWidget(m_pbDelete);
+    m_tb->addWidget(m_pbAdd);
+    m_tb->addWidget(m_pbModify);
+    m_tb->addWidget(m_pbDelete);
 
 #ifdef QT_DEBUG
     QPushButton *pbCreateDb = new QPushButton("Create DB", this);
-    tb->addWidget(pbCreateDb);
+    m_tb->addWidget(pbCreateDb);
     connect(pbCreateDb, &QPushButton::clicked, this, [] {
         DB_Functions::createDatabase();
     });
@@ -60,7 +60,7 @@ void CustomTabWidget::setupUi()
     m_table = new CustomTableView(this);
     m_table->setModel(m_model);
 
-    toolBarLayout->addWidget(tb);
+    toolBarLayout->addWidget(m_tb);
     tableLayout->addWidget(m_table);
 
     mainLayout->addLayout(toolBarLayout);

@@ -6,6 +6,7 @@
 class QPushButton;
 class QSqlQueryModel;
 class CustomTableView;
+class QToolBar;
 
 class CustomTabWidget : public QWidget
 {
@@ -21,6 +22,8 @@ protected:
 
     QSqlQueryModel *m_model;
     CustomTableView *m_table;
+
+    QToolBar *m_tb;
 
 private:
     void setupUi();

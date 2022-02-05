@@ -1,4 +1,4 @@
-#include "AddHoliday.h"
+#include "AddModifyHoliday.h"
 
 #include <QFormLayout>
 #include <QPushButton>
@@ -9,38 +9,42 @@
 #include <QSqlQueryModel>
 #include <QSqlError>
 #include <QDebug>
+#include <QMessageBox>
 
 #include "util/HelperFunctions.h"
 
-namespace AddHoliday_NS {
+namespace AddModifyHoliday_NS {
     static const char* TITLE = "Holidays";
 
     static const char* DESCRTIPTION = "Description";
     static const char* DATE = "Date";
     static const char* SAVE = "Save";
     static const char* CANCEL = "Cancel";
+    static const char* ERROR = "Error";
+    static const char* ERROR_STRING = "Can't save holiday, contact administrator.";
 
-    static const char* SELECT_HOLIDAY = "SELECT id, date, description FROM holidays WHERE id = :holidayId;";
+    static const char* SELECT_HOLIDAY = "SELECT date, description FROM holidays WHERE id = :holidayId;";
     static const char* INSERT_HOLIDAY_QUERY = "INSERT INTO holidays ( date, description) "
                                               "VALUES (:date, :description);";
+    static const char* UPDATE_HOLIDAY = "UPDATE holidays SET date = :date, description = :description WHERE id = :holidayId";
 
 }
 
-using namespace AddHoliday_NS;
+using namespace AddModifyHoliday_NS;
 
-AddHoliday::AddHoliday(QWidget *parent, int holidayId) :
+AddModifyHoliday::AddModifyHoliday(QWidget *parent, int holidayId, int year) :
     QDialog(parent),
     m_holidayId(holidayId)
 {
     setWindowTitle(TITLE);
     setMinimumSize(HelperFunctions::desktopWidth() * 0.25, HelperFunctions::desktopWidth() * 0.08);
-    setupUi();
+    setupUi(year);
 
     if(holidayId >= 0)
         fillHolidayInfo();
 }
 
-void AddHoliday::setupUi()
+void AddModifyHoliday::setupUi(int year)
 {
     QFormLayout *mainLayout = new QFormLayout(this);
 
@@ -49,6 +53,8 @@ void AddHoliday::setupUi()
 
     QLabel *lbDate = new QLabel(DATE, this);
     m_deDate = new QDateEdit(this);
+    m_deDate->setCalendarPopup(true);
+    m_deDate->setDate(QDate(year, 1, 1));
     m_deDate->setDisplayFormat("dd.MM.yyyy");
 
     m_pbSave = new QPushButton(SAVE, this);
@@ -59,11 +65,11 @@ void AddHoliday::setupUi()
     mainLayout->addRow(m_pbSave);
     mainLayout->addRow(m_pbCancel);
 
-    connect(m_pbSave, &QPushButton::clicked, this, &AddHoliday::addHoliday);
+    connect(m_pbSave, &QPushButton::clicked, this, &AddModifyHoliday::saveHoliday);
     connect(m_pbCancel, &QPushButton::clicked, this, &QDialog::reject);
 };
 
-void AddHoliday::fillHolidayInfo()
+void AddModifyHoliday::fillHolidayInfo()
 {
     QSqlQuery q;
 
@@ -76,16 +82,23 @@ void AddHoliday::fillHolidayInfo()
     m_deDate->setDate(q.value(EHolidayColumns::date).toDate());
 }
 
-void AddHoliday::addHoliday()
+void AddModifyHoliday::saveHoliday()
 {
     QSqlQuery q;
 
-    q.prepare(INSERT_HOLIDAY_QUERY);
+    if(m_holidayId > 0) {
+        q.prepare(UPDATE_HOLIDAY);
+        q.bindValue(":holidayId", m_holidayId);
+    } else {
+        q.prepare(INSERT_HOLIDAY_QUERY);
+    }
+
     q.bindValue(":date", m_deDate->date());
     q.bindValue(":description", m_leDescription->text());
 
     if(!q.exec()){
-        qDebug()<<"Query not executed, error: " << q.lastError();
+        qCritical()<<"Query not executed, error: " << q.lastError();
+        QMessageBox::critical(this, ERROR, ERROR_STRING);
         return;
     }
 

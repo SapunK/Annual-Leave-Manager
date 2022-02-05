@@ -12,7 +12,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     custom_widgets/CustomTabWidget.cpp \
     custom_widgets/CustomTableView.cpp \
-    dialogs/AddHoliday.cpp \
+    dialogs/AddModifyHoliday.cpp \
     dialogs/AddModifyUser.cpp \
     dialogs/AddModifyVacDays.cpp \
     main.cpp \
@@ -28,7 +28,7 @@ SOURCES += \
 HEADERS += \
     custom_widgets/CustomTabWidget.h \
     custom_widgets/CustomTableView.h \
-    dialogs/AddHoliday.h \
+    dialogs/AddModifyHoliday.h \
     dialogs/AddModifyUser.h \
     dialogs/AddModifyVacDays.h \
     mainwindow.h \

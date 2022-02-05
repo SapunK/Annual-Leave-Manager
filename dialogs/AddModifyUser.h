@@ -65,7 +65,7 @@ private:
 
 private slots:
 
-    void addUser();
+    void saveUser();
 };
 
 #endif // ADDMODIFYUSER_H

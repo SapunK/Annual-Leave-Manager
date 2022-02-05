@@ -2,7 +2,8 @@
 #define ADDMODIFYVACDAYS_H
 
 #include <QDialog>
-\
+#include <QDate>
+
 namespace AddModifyVacDays_NS {
 
 enum EVDTableColumn{
@@ -28,14 +29,15 @@ class QLineEdit;
 class AddModifyVacDays : public QDialog
 {
 public:
-    explicit AddModifyVacDays(QWidget *parent, int vdId = -1);
+    explicit AddModifyVacDays(QWidget *parent, int vdId = -1, int year = QDate::currentDate().year());
 
 private:
-    void setupUi();
+    void setupUi(int year);
     void fillVdInfo();
     void saveVacDays();
 
     int m_vdId;
+    int m_year;
 
     QComboBox *m_cbUser;
     QSpinBox *m_sbYear;

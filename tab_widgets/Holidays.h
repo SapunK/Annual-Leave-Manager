@@ -11,6 +11,8 @@ enum EHolidayColumns{
 };
 }
 
+class QSpinBox;
+
 class Holidays : public CustomTabWidget
 {
     Q_OBJECT
@@ -19,6 +21,8 @@ public:
 
 private:
     void setupModelView();
+    void setModelQuery();
+    QSpinBox *m_sbYear;
 
 private slots:
     void addClicked();

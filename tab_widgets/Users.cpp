@@ -19,7 +19,7 @@ static const char* GENDER = "Gender";
 static const char* ROLE_NAME = "Role Name";
 
 static const char* DELETE_TITLE = "Delete user";
-static const char* DELETE_USER_MESSAGE = "Are you sure you want to delete this user";
+static const char* DELETE_USER_MESSAGE = "Are you sure you want to delete this user?";
 
 static const char* MODEL_QUERY = "SELECT u.first_name, u.last_name, u.personal_email, u.work_email, u.date_birth, "
                                  "u.date_employment, g.name, ur.role_name, u.id "
@@ -46,8 +46,8 @@ void Users::setupModelView()
     m_table->hideColumn(id);
 
     connect(m_table->selectionModel(), &QItemSelectionModel::selectionChanged, this, [this] {
-       m_pbDelete->setEnabled(true);
-       m_pbModify->setEnabled(true);
+        m_pbModify->setEnabled(m_table->currentIndex().isValid());
+        m_pbDelete->setEnabled(m_table->currentIndex().isValid());
     });
 
     m_model->setHeaderData(firstName, Qt::Horizontal, FIRST_NAME);
@@ -58,6 +58,14 @@ void Users::setupModelView()
     m_model->setHeaderData(dateEmployment, Qt::Horizontal, DATE_EMPLOYMENT);
     m_model->setHeaderData(gender, Qt::Horizontal, GENDER);
     m_model->setHeaderData(roleName, Qt::Horizontal, ROLE_NAME);
+}
+
+void Users::setModelQuery()
+{
+    m_model->setQuery(MODEL_QUERY);
+    m_pbModify->setEnabled(m_table->currentIndex().isValid());
+    m_pbDelete->setEnabled(m_table->currentIndex().isValid());
+    m_table->resizeColumnsToContents();
 }
 
 void Users::addClicked()
@@ -73,9 +81,7 @@ void Users::modifyClicked()
 {
     AddModifyUser *dlg = new AddModifyUser(this, m_model->index(m_table->currentIndex().row(), Users_NS::id).data().toInt());
     connect(dlg, &QDialog::accepted, this, [this] {
-        m_model->setQuery(MODEL_QUERY);
-        m_pbModify->setEnabled(m_table->currentIndex().isValid());
-        m_pbDelete->setEnabled(m_table->currentIndex().isValid());
+        setModelQuery();
     });
 
     dlg->exec();
@@ -89,9 +95,7 @@ void Users::deleteClicked()
         q.bindValue(":userId", m_model->index(m_table->currentIndex().row(), Users_NS::id).data().toInt());
         q.exec();
 
-        m_model->setQuery(MODEL_QUERY);
-        m_pbModify->setEnabled(m_table->currentIndex().isValid());
-        m_pbDelete->setEnabled(m_table->currentIndex().isValid());
+        setModelQuery();
     }
 }
 

@@ -11,6 +11,7 @@
 #include <QDate>
 #include <QPushButton>
 #include <QDebug>
+#include <QMessageBox>
 
 #include "util/HelperFunctions.h"
 
@@ -24,34 +25,39 @@ static const char* SAVE = "Save";
 static const char* CANCEL = "Cancel";
 
 static const char* VACATION_TITLE = "Vacation days";
-
+static const char* ERROR = "Error";
+static const char* ERROR_STRING = "There is already a record for user %1 for year %2";
 static const char* SELECT_ROWS = "SELECT * FROM vacation_days WHERE user_id = :userId AND year = :year";
 static const char* SELECT_VD = "SELECT user_id, year, days FROM vacation_days WHERE id = :vdId;";
 static const char* INSERT_VD_QUERY = "INSERT INTO vacation_days (user_id, year, days) "
                                      "VALUES (:user_id, :year, :days)";
 static const char* USER_QUERY = "SELECT concat(first_name, ' ' ,last_name) AS name, id FROM users;";
+static const char* UPDATE_VD = "UPDATE vacation_days SET year = :year, days = :days WHERE id = :vdId;";
+
 }
 
 using namespace AddModifyVacDays_NS;
 
-AddModifyVacDays::AddModifyVacDays(QWidget *parent, int vdId)
+AddModifyVacDays::AddModifyVacDays(QWidget *parent, int vdId, int year)
     : QDialog(parent),
-      m_vdId(vdId)
+      m_vdId(vdId),
+      m_year(year)
 {
     setWindowTitle(VACATION_TITLE);
     setMinimumSize(HelperFunctions::desktopWidth() * 0.15, HelperFunctions::desktopWidth() * 0.08);
-    setupUi();
+    setupUi(year);
 
     if(vdId > 0 )
         fillVdInfo();
 }
 
-void AddModifyVacDays::setupUi()
+void AddModifyVacDays::setupUi(int year)
 {
     QFormLayout *mainLayout = new QFormLayout(this);
 
     QLabel *lbUser = new QLabel(USER, this);
     m_cbUser = new QComboBox(this);
+    m_cbUser->setDisabled(m_vdId > 0);
 
     QSqlQueryModel *userModel = new QSqlQueryModel(this);
     userModel->setQuery(USER_QUERY);
@@ -61,7 +67,7 @@ void AddModifyVacDays::setupUi()
     m_sbYear = new QSpinBox(this);
     m_sbYear->setMinimum(2000);
     m_sbYear->setMaximum(9999);
-    m_sbYear->setValue(QDate::currentDate().year());
+    m_sbYear->setValue(year);
 
     QLabel *lbDays = new QLabel(DAYS, this);
     m_sbDays = new QSpinBox(this);
@@ -101,16 +107,35 @@ void AddModifyVacDays::fillVdInfo()
 
 }
 
-//TODO mozhe da ima validacija dali vo baza vekje ima record za toj user i godina
 void AddModifyVacDays::saveVacDays()
 {
-
     QSqlQuery q;
 
-    q.prepare(INSERT_VD_QUERY);
+    q.prepare(SELECT_ROWS);
+    q.bindValue(":year", m_sbYear->value());
+    q.bindValue(":userId", m_cbUser->model()->index(m_cbUser->currentIndex(), EUserColumns::id).data().toInt());
+
+    if(q.exec() && q.numRowsAffected() > 0 &&
+            ((m_vdId > 0 && m_sbYear->value() != m_year) || m_vdId == -1)) {
+
+        QMessageBox::critical(this, ERROR, QString(ERROR_STRING)
+                                   .arg(m_cbUser->model()->index(m_cbUser->currentIndex(),
+                                   EUserColumns::user).data().toString(),
+                                   QString::number(m_sbYear->value())));
+        return;
+    }
+
+    if(m_vdId > 0) {
+        q.prepare(UPDATE_VD);
+        q.bindValue(":vdId", m_vdId);
+    } else {
+        q.prepare(INSERT_VD_QUERY);
+        q.bindValue(":user_id", m_cbUser->model()->index(m_cbUser->currentIndex(), EUserColumns::id).data().toInt());
+    }
+
     q.bindValue(":days", m_sbDays->value());
     q.bindValue(":year", m_sbYear->value());
-    q.bindValue(":user_id", m_cbUser->model()->index(m_cbUser->currentIndex(), EUserColumns::id).data().toInt());
+
 
     if(!q.exec()) {
         qCritical()<<"Query not executed, error: " << q.lastError();

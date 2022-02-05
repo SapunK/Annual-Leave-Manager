@@ -29,13 +29,13 @@ static const char* DATE_EMPLOYMENT = "Date employment";
 static const char* USER_ROLE = "User Role";
 static const char* GENDER_ID = "Gender";
 static const char* ERROR = "Error";
+static const char* ERROR_STRING = "Can't save user, contact administrator.";
 static const char* SAVE = "Save";
 static const char* CANCEL = "Cancel";
 static const char* USERNAME_VALIDATION = "Username can't be empty";
 static const char* FIRST_NAME_VALIDATION = "First name can't be empty";
 static const char* LAST_NAME_VALIDATION = "Last name can't be empty";
 static const char* PASSWORD_VALIDATION = "Password can't be empty";
-static const char* WORK_EMAIL_VALIDATION = "Working email can't be empty";
 
 static const char* DATE_FORMAT = "dd.MM.yyyy";
 
@@ -141,7 +141,7 @@ void AddModifyUser::setupUi()
     mainLayout->addRow(m_pbSave);
     mainLayout->addRow(m_pbCancel);
 
-    connect(m_pbSave, &QPushButton::clicked, this, &AddModifyUser::addUser);
+    connect(m_pbSave, &QPushButton::clicked, this, &AddModifyUser::saveUser);
     connect(m_pbCancel, &QPushButton::clicked, this, &QDialog::reject);
 }
 
@@ -171,7 +171,7 @@ void AddModifyUser::fillUserInfo()
     }
 }
 
-void AddModifyUser::addUser()
+void AddModifyUser::saveUser()
 {
     if(m_leUsername->text().isEmpty()) {
         QMessageBox::critical(this, ERROR, USERNAME_VALIDATION);
@@ -192,12 +192,6 @@ void AddModifyUser::addUser()
         QMessageBox::critical(this, ERROR, PASSWORD_VALIDATION);
         return;
     }
-
-    if(m_leWorkEmail->text().isEmpty()){
-        QMessageBox::critical(this, ERROR, WORK_EMAIL_VALIDATION);
-        return;
-    }
-
 
     QSqlQuery q;
 
@@ -223,8 +217,9 @@ void AddModifyUser::addUser()
 
     if(!q.exec()) {
         qCritical()<<"Add user query error: "<<q.lastError()<<" last query: "<<q.lastQuery();
-        //QMessageBox
-    } else {
-        QDialog::accept();
+        QMessageBox::critical(this, ERROR, ERROR_STRING);
+        return;
     }
+
+    QDialog::accept();
 }

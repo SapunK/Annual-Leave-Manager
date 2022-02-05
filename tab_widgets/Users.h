@@ -25,6 +25,7 @@ public:
 
 private:
     void setupModelView();
+    void setModelQuery();
 
 private slots:
     void addClicked();
