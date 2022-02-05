@@ -22,8 +22,6 @@ public:
     explicit AddModifyHoliday(QWidget *parent = nullptr, int holidayId = -1,
                               int year = QDate::currentDate().year());
 
-    void setModifyDate();
-
 private:
     void setupUi(int year);
     void fillHolidayInfo();
