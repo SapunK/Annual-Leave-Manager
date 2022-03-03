@@ -1,5 +1,7 @@
 QT       += core gui sql
 
+DEFINES += QT_DEPRECATED_WARNINGS
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++20
@@ -12,15 +14,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     custom_widgets/CustomTabWidget.cpp \
     custom_widgets/CustomTableView.cpp \
+    dialogs/AddModifyALDays.cpp \
     dialogs/AddModifyHoliday.cpp \
     dialogs/AddModifyUser.cpp \
-    dialogs/AddModifyVacDays.cpp \
     main.cpp \
     mainwindow.cpp \
     models/test.cpp \
+    tab_widgets/ALDays.cpp \
     tab_widgets/Holidays.cpp \
     tab_widgets/Users.cpp \
-    tab_widgets/VacationDays.cpp \
     util/DB_Functions.cpp \
     util/HelperFunctions.cpp \
     util/appconsts.cpp
@@ -28,13 +30,13 @@ SOURCES += \
 HEADERS += \
     custom_widgets/CustomTabWidget.h \
     custom_widgets/CustomTableView.h \
+    dialogs/AddModifyALDays.h \
     dialogs/AddModifyHoliday.h \
     dialogs/AddModifyUser.h \
-    dialogs/AddModifyVacDays.h \
     mainwindow.h \
+    tab_widgets/ALDays.h \
     tab_widgets/Holidays.h \
     tab_widgets/Users.h \
-    tab_widgets/VacationDays.h \
     util/DB_Functions.h \
     util/HelperFunctions.h \
     util/appconsts.h

@@ -7,9 +7,10 @@
 
 #include "util/HelperFunctions.h"
 #include "tab_widgets/Users.h"
-#include "tab_widgets/VacationDays.h"
+#include "tab_widgets/ALDays.h"
 #include "tab_widgets/Holidays.h"
 
+//TODO rename project to annual leave manager and classes VacationDays to ALDays
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
@@ -28,7 +29,7 @@ void MainWindow::setupUi()
     QVBoxLayout *layout = new QVBoxLayout(mainWidget);
 
     Users *usersWidget = new Users(this);
-    VacationDays *vacationDays = new VacationDays(this);
+    ALDays *vacationDays = new ALDays(this);
     Holidays *holidays = new Holidays(this);
     tabWidget->addTab(usersWidget, "Users");
     tabWidget->addTab(vacationDays, "Vacation days");

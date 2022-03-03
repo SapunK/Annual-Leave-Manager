@@ -1,4 +1,4 @@
-#include "VacationDays.h"
+#include "ALDays.h"
 
 #include <QSqlQueryModel>
 #include <QSqlQuery>
@@ -8,11 +8,11 @@
 #include <QToolBar>
 #include <QSpinBox>
 
-#include "dialogs/AddModifyVacDays.h"
+#include "dialogs/AddModifyALDays.h"
 #include "custom_widgets/CustomTableView.h"
 
 
-namespace VacationDays_NS {
+namespace AnnualLeaveDays_NS {
 static const char* USER = "User";
 static const char* DAYS = "Days";
 static const char* YEAR = "Year";
@@ -21,18 +21,18 @@ static const char* NAME = "Name";
 
 static const char* DELETE_TITLE = "Delete";
 static const char* DELETE_MSG = "Are you sure you want to delete this record?";
-static const char* MODEL_QUERY = "SELECT u.first_name || ' ' || u.last_name, vd.year, vd.days, vd.id "
-                                 "FROM vacation_days vd "
-                                 "INNER JOIN users u on u.id = vd.user_id "
-                                 "WHERE vd.year = :year;";
+static const char* MODEL_QUERY = "SELECT u.first_name || ' ' || u.last_name, ald.year, ald.days, ald.id "
+                                 "FROM annual_leave_days ald "
+                                 "INNER JOIN users u on u.id = ald.user_id "
+                                 "WHERE ald.year = :year;";
 
-static const char* DELETE_VD_QUERY = "DELETE FROM vacation_days WHERE id = :vdId";
+static const char* DELETE_VD_QUERY = "DELETE FROM annual_leave_days WHERE id = :aldId";
 
 }
 
-using namespace VacationDays_NS;
+using namespace AnnualLeaveDays_NS;
 
-VacationDays::VacationDays(QWidget *parent)
+ALDays::ALDays(QWidget *parent)
     : CustomTabWidget(parent)
 {
     m_sbYear = new QSpinBox(this);
@@ -48,7 +48,7 @@ VacationDays::VacationDays(QWidget *parent)
     setupModelView();
 }
 
-void VacationDays::setupModelView()
+void ALDays::setupModelView()
 {
     setModelQuery();
     m_table->setModel(m_model);
@@ -66,7 +66,7 @@ void VacationDays::setupModelView()
     m_model->setHeaderData(id, Qt::Horizontal, USER);
 }
 
-void VacationDays::setModelQuery()
+void ALDays::setModelQuery()
 {
     QSqlQuery q;
     q.prepare(MODEL_QUERY);
@@ -79,7 +79,7 @@ void VacationDays::setModelQuery()
     m_pbDelete->setEnabled(m_table->currentIndex().isValid());
 }
 
-void VacationDays::addClicked()
+void ALDays::addClicked()
 {
     AddModifyVacDays *dlg = new AddModifyVacDays(this, -1, m_sbYear->value());
     connect(dlg, &QDialog::accepted, this, [this]{
@@ -88,21 +88,21 @@ void VacationDays::addClicked()
     dlg->exec();
 }
 
-void VacationDays::modifyClicked()
+void ALDays::modifyClicked()
 {
-    AddModifyVacDays *dlg = new AddModifyVacDays(this, m_model->index(m_table->currentIndex().row(), VacationDays_NS::id).data().toInt(), m_sbYear->value());
+    AddModifyVacDays *dlg = new AddModifyVacDays(this, m_model->index(m_table->currentIndex().row(), AnnualLeaveDays_NS::id).data().toInt(), m_sbYear->value());
     connect(dlg, &QDialog::accepted, this, [this]{
         setModelQuery();
     });
     dlg->exec();
 }
 
-void VacationDays::deleteClicked()
+void ALDays::deleteClicked()
 {
     if(QMessageBox::question(this, DELETE_TITLE, DELETE_MSG) == QMessageBox::Yes){
         QSqlQuery q;
         q.prepare(DELETE_VD_QUERY);
-        q.bindValue(":vdId", m_model->index(m_table->currentIndex().row(), VacationDays_NS::id).data().toInt());
+        q.bindValue(":vdId", m_model->index(m_table->currentIndex().row(), AnnualLeaveDays_NS::id).data().toInt());
         q.exec();
 
         setModelQuery();

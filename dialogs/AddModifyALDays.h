@@ -1,5 +1,5 @@
-#ifndef ADDMODIFYVACDAYS_H
-#define ADDMODIFYVACDAYS_H
+#ifndef ADDMODIFYALDAYS_H
+#define ADDMODIFYALDAYS_H
 
 #include <QDialog>
 #include <QDate>
@@ -49,4 +49,4 @@ private:
 
 };
 
-#endif // ADDMODIFYVACDAYS_H
+#endif // ADDMODIFYALDAYS_H
