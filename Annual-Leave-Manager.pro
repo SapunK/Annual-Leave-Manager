@@ -14,12 +14,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     custom_widgets/CustomTabWidget.cpp \
     custom_widgets/CustomTableView.cpp \
+    dialogs/AddModifyALDays.cpp \
     dialogs/AddModifyHoliday.cpp \
     dialogs/AddModifyUser.cpp \
     dialogs/AddModifyUserDays.cpp \
     main.cpp \
     mainwindow.cpp \
     models/test.cpp \
+    tab_widgets/AnnualLeaveDays.cpp \
     tab_widgets/Holidays.cpp \
     tab_widgets/UserDays.cpp \
     tab_widgets/Users.cpp \
@@ -30,10 +32,12 @@ SOURCES += \
 HEADERS += \
     custom_widgets/CustomTabWidget.h \
     custom_widgets/CustomTableView.h \
+    dialogs/AddModifyALDays.h \
     dialogs/AddModifyHoliday.h \
     dialogs/AddModifyUser.h \
     dialogs/AddModifyUserDays.h \
     mainwindow.h \
+    tab_widgets/AnnualLeaveDays.h \
     tab_widgets/Holidays.h \
     tab_widgets/UserDays.h \
     tab_widgets/Users.h \

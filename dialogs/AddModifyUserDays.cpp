@@ -24,13 +24,13 @@ const char* DAYS = "Days";
 static const char* SAVE = "Save";
 static const char* CANCEL = "Cancel";
 
-static const char* AL_TITLE = "Annual Leave Days";
+static const char* UD_TITLE = "User Days";
 static const char* ERROR = "Error";
 static const char* ERROR_STRING = "There is already a record for user %1 for year %2";
 static const char* SELECT_ROWS = "SELECT * FROM user_days WHERE user_id = :userId AND year = :year";
 static const char* SELECT_UD = "SELECT user_id, year, days FROM user_days WHERE id = :udId;";
 static const char* INSERT_UD_QUERY = "INSERT INTO user_days (user_id, year, days) "
-                                     "VALUES (:user_id, :year, :days)";
+                                     "VALUES (:userId, :year, :days)";
 static const char* USER_QUERY = "SELECT concat(first_name, ' ' ,last_name) AS name, id FROM users;";
 static const char* UPDATE_UD = "UPDATE user_days SET year = :year, days = :days WHERE id = :udId;";
 
@@ -43,7 +43,7 @@ AddModifyUserDays::AddModifyUserDays(QWidget *parent, int udId, int year)
       m_udId(udId),
       m_year(year)
 {
-    setWindowTitle(AL_TITLE);
+    setWindowTitle(UD_TITLE);
     setMinimumSize(HelperFunctions::desktopWidth() * 0.15, HelperFunctions::desktopWidth() * 0.08);
     setupUi(year);
 
@@ -97,8 +97,6 @@ void AddModifyUserDays::fillUdInfo()
     q.exec();
     q.next();
 
-    qDebug()<<"last query: " << q.lastQuery()<<" last error: " <<q.lastError()<<" days val: "<<q.value(EUDTableColumn::days).toInt();
-
     m_sbDays->setValue(q.value(EUDTableColumn::days).toInt());
     m_sbYear->setValue(q.value(EUDTableColumn::year).toInt());
 
@@ -106,7 +104,6 @@ void AddModifyUserDays::fillUdInfo()
         if(m_cbUser->model()->index(i, EUserColumns::id).data().toInt() == q.value(EUDTableColumn::userId).toInt())
             m_cbUser->setCurrentIndex(m_cbUser->findText(m_cbUser->model()->index(i, EUserColumns::user).data().toString()));
     }
-
 }
 
 void AddModifyUserDays::saveUserDays()
@@ -132,7 +129,7 @@ void AddModifyUserDays::saveUserDays()
         q.bindValue(":udId", m_udId);
     } else {
         q.prepare(INSERT_UD_QUERY);
-        q.bindValue(":user_id", m_cbUser->model()->index(m_cbUser->currentIndex(), EUserColumns::id).data().toInt());
+        q.bindValue(":userId", m_cbUser->model()->index(m_cbUser->currentIndex(), EUserColumns::id).data().toInt());
     }
 
     q.bindValue(":days", m_sbDays->value());
