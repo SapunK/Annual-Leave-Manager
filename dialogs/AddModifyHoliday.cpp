@@ -14,19 +14,19 @@
 #include "util/HelperFunctions.h"
 
 namespace AddModifyHoliday_NS {
-    static const char* TITLE = "Holidays";
+static const char* TITLE = "Holidays";
 
-    static const char* DESCRTIPTION = "Description";
-    static const char* DATE = "Date";
-    static const char* SAVE = "Save";
-    static const char* CANCEL = "Cancel";
-    static const char* ERROR = "Error";
-    static const char* ERROR_STRING = "Can't save holiday, contact administrator.";
+static const char* DESCRTIPTION = "Description";
+static const char* DATE = "Date";
+static const char* SAVE = "Save";
+static const char* CANCEL = "Cancel";
+static const char* ERROR = "Error";
+static const char* ERROR_STRING = "Can't save holiday, contact administrator.";
 
-    static const char* SELECT_HOLIDAY = "SELECT date, description FROM holidays WHERE id = :holidayId;";
-    static const char* INSERT_HOLIDAY_QUERY = "INSERT INTO holidays ( date, description) "
-                                              "VALUES (:date, :description);";
-    static const char* UPDATE_HOLIDAY = "UPDATE holidays SET date = :date, description = :description WHERE id = :holidayId";
+static const char* SELECT_HOLIDAY = "SELECT date, description FROM holidays WHERE id = :holidayId;";
+static const char* INSERT_HOLIDAY_QUERY = "INSERT INTO holidays (date, description) "
+                                          "VALUES (:date, :description);";
+static const char* UPDATE_HOLIDAY = "UPDATE holidays SET date = :date, description = :description WHERE id = :holidayId";
 
 }
 

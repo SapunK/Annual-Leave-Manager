@@ -1,4 +1,4 @@
-﻿#include "AddModifyALDays.h"
+﻿#include "AddModifyUserDays.h"
 
 #include <QComboBox>
 #include <QLabel>
@@ -16,7 +16,7 @@
 #include "util/HelperFunctions.h"
 
 
-namespace AddModifyVacDays_NS {
+namespace AddModifyUserDays_NS {
 const char* USER = "User";
 const char* YEAR = "Year";
 const char* DAYS = "Days";
@@ -24,40 +24,40 @@ const char* DAYS = "Days";
 static const char* SAVE = "Save";
 static const char* CANCEL = "Cancel";
 
-static const char* VACATION_TITLE = "Vacation days";
+static const char* AL_TITLE = "Annual Leave Days";
 static const char* ERROR = "Error";
 static const char* ERROR_STRING = "There is already a record for user %1 for year %2";
-static const char* SELECT_ROWS = "SELECT * FROM vacation_days WHERE user_id = :userId AND year = :year";
-static const char* SELECT_VD = "SELECT user_id, year, days FROM vacation_days WHERE id = :vdId;";
-static const char* INSERT_VD_QUERY = "INSERT INTO vacation_days (user_id, year, days) "
+static const char* SELECT_ROWS = "SELECT * FROM user_days WHERE user_id = :userId AND year = :year";
+static const char* SELECT_UD = "SELECT user_id, year, days FROM user_days WHERE id = :udId;";
+static const char* INSERT_UD_QUERY = "INSERT INTO user_days (user_id, year, days) "
                                      "VALUES (:user_id, :year, :days)";
 static const char* USER_QUERY = "SELECT concat(first_name, ' ' ,last_name) AS name, id FROM users;";
-static const char* UPDATE_VD = "UPDATE vacation_days SET year = :year, days = :days WHERE id = :vdId;";
+static const char* UPDATE_UD = "UPDATE user_days SET year = :year, days = :days WHERE id = :udId;";
 
 }
 
-using namespace AddModifyVacDays_NS;
+using namespace AddModifyUserDays_NS;
 
-AddModifyVacDays::AddModifyVacDays(QWidget *parent, int vdId, int year)
+AddModifyUserDays::AddModifyUserDays(QWidget *parent, int udId, int year)
     : QDialog(parent),
-      m_vdId(vdId),
+      m_udId(udId),
       m_year(year)
 {
-    setWindowTitle(VACATION_TITLE);
+    setWindowTitle(AL_TITLE);
     setMinimumSize(HelperFunctions::desktopWidth() * 0.15, HelperFunctions::desktopWidth() * 0.08);
     setupUi(year);
 
-    if(vdId > 0 )
-        fillVdInfo();
+    if(udId > 0 )
+        fillUdInfo();
 }
 
-void AddModifyVacDays::setupUi(int year)
+void AddModifyUserDays::setupUi(int year)
 {
     QFormLayout *mainLayout = new QFormLayout(this);
 
     QLabel *lbUser = new QLabel(USER, this);
     m_cbUser = new QComboBox(this);
-    m_cbUser->setDisabled(m_vdId > 0);
+    m_cbUser->setDisabled(m_udId > 0);
 
     QSqlQueryModel *userModel = new QSqlQueryModel(this);
     userModel->setQuery(USER_QUERY);
@@ -83,31 +83,33 @@ void AddModifyVacDays::setupUi(int year)
     mainLayout->addRow(lbDays, m_sbDays);
     mainLayout->addRow(m_pbCancel);
     mainLayout->addRow(m_pbSave);
-    connect(m_pbSave, &QPushButton::clicked, this, &AddModifyVacDays::saveVacDays);
+    connect(m_pbSave, &QPushButton::clicked, this, &AddModifyUserDays::saveUserDays);
     connect(m_pbCancel, &QPushButton::clicked, this, &QDialog::reject);
 
 }
 
-void AddModifyVacDays::fillVdInfo()
+void AddModifyUserDays::fillUdInfo()
 {
     QSqlQuery q;
 
-    q.prepare(SELECT_VD);
-    q.bindValue(":vdId", m_vdId);
+    q.prepare(SELECT_UD);
+    q.bindValue(":udId", m_udId);
     q.exec();
     q.next();
 
-    m_sbDays->setValue(q.value(EVDTableColumn::days).toInt());
-    m_sbYear->setValue(q.value(EVDTableColumn::year).toInt());
+    qDebug()<<"last query: " << q.lastQuery()<<" last error: " <<q.lastError()<<" days val: "<<q.value(EUDTableColumn::days).toInt();
+
+    m_sbDays->setValue(q.value(EUDTableColumn::days).toInt());
+    m_sbYear->setValue(q.value(EUDTableColumn::year).toInt());
 
     for(int i = 0 ; i < m_cbUser->model()->rowCount() ; i++){
-        if(m_cbUser->model()->index(i, EUserColumns::id).data().toInt() == q.value(EVDTableColumn::userId).toInt())
+        if(m_cbUser->model()->index(i, EUserColumns::id).data().toInt() == q.value(EUDTableColumn::userId).toInt())
             m_cbUser->setCurrentIndex(m_cbUser->findText(m_cbUser->model()->index(i, EUserColumns::user).data().toString()));
     }
 
 }
 
-void AddModifyVacDays::saveVacDays()
+void AddModifyUserDays::saveUserDays()
 {
     QSqlQuery q;
 
@@ -116,7 +118,7 @@ void AddModifyVacDays::saveVacDays()
     q.bindValue(":userId", m_cbUser->model()->index(m_cbUser->currentIndex(), EUserColumns::id).data().toInt());
 
     if(q.exec() && q.numRowsAffected() > 0 &&
-            ((m_vdId > 0 && m_sbYear->value() != m_year) || m_vdId == -1)) {
+            ((m_udId > 0 && m_sbYear->value() != m_year) || m_udId == -1)) {
 
         QMessageBox::critical(this, ERROR, QString(ERROR_STRING)
                                    .arg(m_cbUser->model()->index(m_cbUser->currentIndex(),
@@ -125,11 +127,11 @@ void AddModifyVacDays::saveVacDays()
         return;
     }
 
-    if(m_vdId > 0) {
-        q.prepare(UPDATE_VD);
-        q.bindValue(":vdId", m_vdId);
+    if(m_udId > 0) {
+        q.prepare(UPDATE_UD);
+        q.bindValue(":udId", m_udId);
     } else {
-        q.prepare(INSERT_VD_QUERY);
+        q.prepare(INSERT_UD_QUERY);
         q.bindValue(":user_id", m_cbUser->model()->index(m_cbUser->currentIndex(), EUserColumns::id).data().toInt());
     }
 

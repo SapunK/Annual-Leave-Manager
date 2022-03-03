@@ -1,12 +1,12 @@
-#ifndef ADDMODIFYALDAYS_H
-#define ADDMODIFYALDAYS_H
+#ifndef ADDMODIFYUSERDAYS_H
+#define ADDMODIFYUSERDAYS_H
 
 #include <QDialog>
 #include <QDate>
 
-namespace AddModifyVacDays_NS {
+namespace AddModifyUserDays_NS {
 
-enum EVDTableColumn{
+enum EUDTableColumn{
     userId,
     year,
     days
@@ -26,17 +26,17 @@ class QComboBox;
 class QSpinBox;
 class QLineEdit;
 
-class AddModifyVacDays : public QDialog
+class AddModifyUserDays : public QDialog
 {
 public:
-    explicit AddModifyVacDays(QWidget *parent, int vdId = -1, int year = QDate::currentDate().year());
+    explicit AddModifyUserDays(QWidget *parent, int udId = -1, int year = QDate::currentDate().year());
 
 private:
     void setupUi(int year);
-    void fillVdInfo();
-    void saveVacDays();
+    void fillUdInfo();
+    void saveUserDays();
 
-    int m_vdId;
+    int m_udId;
     int m_year;
 
     QComboBox *m_cbUser;
@@ -49,4 +49,4 @@ private:
 
 };
 
-#endif // ADDMODIFYALDAYS_H
+#endif // ADDMODIFYUSERDAYS_H

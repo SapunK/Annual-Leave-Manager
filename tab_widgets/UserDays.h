@@ -1,9 +1,9 @@
-#ifndef ALDAYS_H
-#define ALDAYS_H
+#ifndef USERDAYS_H
+#define USERDAYS_H
 
 #include "custom_widgets/CustomTabWidget.h"
 
-namespace AnnualLeaveDays_NS {
+namespace UserDays_NS {
 enum EALDays{
     name,
     year,
@@ -14,11 +14,11 @@ enum EALDays{
 
 class QSpinBox;
 
-class ALDays : public CustomTabWidget
+class UserDays : public CustomTabWidget
 {
     Q_OBJECT
 public:
-    explicit ALDays(QWidget *parent = nullptr);
+    explicit UserDays(QWidget *parent = nullptr);
 
 private:
     void setupModelView();
@@ -33,4 +33,4 @@ private slots:
 
 };
 
-#endif // ALDAYS_H
+#endif // USERDAYS_H
