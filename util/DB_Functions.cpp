@@ -120,14 +120,14 @@ void DB_Functions::createVacDays()
 void DB_Functions::createHolidays()
 {
     QSqlQuery q;
-    if(q.exec(CREATE_HOLIDAYS))
+    if(!q.exec(CREATE_HOLIDAYS))
         qWarning()<<"Unable to create table holidays, error: "<<q.lastError()<<" last query: "<< q.lastQuery();
 }
 
 void DB_Functions::createAlDays()
 {
     QSqlQuery q;
-    if(q.exec(CREATE_AL_DAYS))
+    if(!q.exec(CREATE_AL_DAYS))
         qWarning()<<"Unable to create table annual leave days, error: "<<q.lastError()<<" last query: "<< q.lastQuery();
 }
 

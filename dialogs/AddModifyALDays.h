@@ -8,7 +8,8 @@ enum EALDTableColumns {
     id,
     user,
     dateFrom,
-    dateTo
+    dateTo,
+    usedDays
 };
 
 enum EUserColumns{

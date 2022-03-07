@@ -48,8 +48,7 @@ void MainWindow::dbConnect()
 {
     QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL");
     db.setHostName("127.0.0.1");
-    //TODO rename db
-    db.setDatabaseName("vacation_days_manager");
+    db.setDatabaseName("annual_leave_manager");
     db.setUserName("postgres");
     db.setPassword("postgres");
     db.setPort(5432);

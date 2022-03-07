@@ -13,7 +13,7 @@
 
 namespace ALDays_NS {
 static const char* MODEL_QUERY = "SELECT ald.id, u.first_name || ' ' || u.last_name, "
-                                 "ald.date_from, ald.date_to "
+                                 "ald.date_from, ald.date_to, ald.used_days "
                                  "FROM annual_leave_days ald "
                                  "INNER JOIN users u on u.id = ald.user_id "
                                  "WHERE EXTRACT(YEAR FROM date_from) = :year "
@@ -21,6 +21,7 @@ static const char* MODEL_QUERY = "SELECT ald.id, u.first_name || ' ' || u.last_n
 static const char* DELETE_TITLE = "Delete";
 static const char* DELETE_MSG = "Are you sure you want to delete this record?";
 static const char* DELETE_ALD_QUERY = "DELETE FROM annual_leave_days WHERE id = :aldId";
+static const char* USED_DAYS = "Used days";
 }
 
 using namespace ALDays_NS;
@@ -57,6 +58,7 @@ void AnnualLeaveDays::setupModelView()
     m_model->setHeaderData(user, Qt::Horizontal, USER);
     m_model->setHeaderData(dateFrom, Qt::Horizontal, DATE_FROM);
     m_model->setHeaderData(dateTo, Qt::Horizontal, DATE_TO);
+    m_model->setHeaderData(usedDays, Qt::Horizontal, USED_DAYS);
 }
 
 void AnnualLeaveDays::setModelQuery()
