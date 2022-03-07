@@ -61,6 +61,7 @@ static const char* CREATE_AL_DAYS = "CREATE TABLE annual_leave_days ("
                                     "user_id integer NOT NULL, "
                                     "date_from date NOT NULL, "
                                     "date_to date NOT NULL, "
+                                    "used_days integer NOT NULL, "
                                     "CONSTRAINT annual_leave_days_pkey PRIMARY KEY (id), "
                                     "CONSTRAINT fk_user FOREIGN KEY (user_id) "
                                     "     REFERENCES public.users (id) MATCH SIMPLE "
@@ -87,6 +88,7 @@ void DB_Functions::createDatabase()
     createUsers();
     createVacDays();
     createHolidays();
+    createAlDays();
 }
 
 void DB_Functions::createUsers()
@@ -120,6 +122,13 @@ void DB_Functions::createHolidays()
     QSqlQuery q;
     if(q.exec(CREATE_HOLIDAYS))
         qWarning()<<"Unable to create table holidays, error: "<<q.lastError()<<" last query: "<< q.lastQuery();
+}
+
+void DB_Functions::createAlDays()
+{
+    QSqlQuery q;
+    if(q.exec(CREATE_AL_DAYS))
+        qWarning()<<"Unable to create table annual leave days, error: "<<q.lastError()<<" last query: "<< q.lastQuery();
 }
 
 

@@ -12,6 +12,7 @@ private:
     static void createUsers();
     static void createVacDays();
     static void createHolidays();
+    static void createAlDays();
     static void fillGenders();
     static void fillUserRoles();
 };

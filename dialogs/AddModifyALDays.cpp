@@ -24,10 +24,11 @@ static const char* SAVE = "Save";
 static const char* CANCEL = "Cancel";
 
 static const char* USER_QUERY = "SELECT concat(first_name, ' ' ,last_name) AS name, id FROM users;";
-static const char* SELECT_ALD = "SELECT user_id, date_from, date_to FROM annual_leave_days WHERE id = :aldId;";
-static const char* UPDATE_ALD = "UPDATE annual_leave_days SET date_from = :dateFrom, date_to = :dateTo;";
-static const char* INSERT_ALD = "INSERT INTO annual_leave_days (user_id, date_from, date_to) "
-                                "VALUES (:userId, :dateFrom, :dateTo);";
+static const char* SELECT_ALD = "SELECT id, user_id, date_from, date_to FROM annual_leave_days WHERE id = :aldId;";
+static const char* UPDATE_ALD = "UPDATE annual_leave_days SET date_from = :dateFrom, date_to = :dateTo, used_days = :usedDays WHERE id = :aldId;";
+static const char* INSERT_ALD = "INSERT INTO annual_leave_days (user_id, date_from, date_to, used_days) "
+                                "VALUES (:userId, :dateFrom, :dateTo, :usedDays);";
+static const char* SELECT_HOLIDAYS = "SELECT date FROM holidays WHERE EXTRACT(year FROM date) = :year;";
 }
 
 using namespace AddModifyALDays_NS;
@@ -94,7 +95,7 @@ void AddModifyALDays::fillALDInfo()
 
     for(int i = 0 ; i < m_cbUser->model()->rowCount() ; i++){
         if(m_cbUser->model()->index(i, EUserColumns::userId).data().toInt() == q.value(EALDTableColumns::user).toInt())
-            m_cbUser->setCurrentIndex(m_cbUser->findText(m_cbUser->model()->index(i, EUserColumns::userId).data().toString()));
+            m_cbUser->setCurrentIndex(i);
     }
 }
 
@@ -102,16 +103,43 @@ void AddModifyALDays::saveALDays()
 {
     QSqlQuery q;
 
+    q.prepare(SELECT_HOLIDAYS);
+    q.bindValue(":year", m_deDateFrom->date().year());
+    q.exec();
+
+    QList<QDate> holidays;
+
+    while(q.next())
+        holidays.append(q.value(0).toDate());
+
+
+    int userId = m_cbUser->model()->index(m_cbUser->currentIndex(), EUserColumns::userId).data().toInt();
+
+    QDate dateFrom = m_deDateFrom->date();
+    QDate dateTo = m_deDateTo->date();
+
+    int usedDays = 0;
+
+    for(int i = 0 ; i <= dateFrom.daysTo(dateTo) ; i++) {
+        QDate checkDay = dateFrom.addDays(i);
+        if(checkDay.dayOfWeek() != Qt::Saturday &&
+                checkDay.dayOfWeek() != Qt::Sunday &&
+                !holidays.contains(checkDay)) {
+            usedDays++;
+        }
+    }
+
     if(m_aldId > 0) {
         q.prepare(UPDATE_ALD);
         q.bindValue(":aldId", m_aldId);
     } else {
         q.prepare(INSERT_ALD);
-        q.bindValue(":userId", m_cbUser->model()->index(m_cbUser->currentIndex(), EUserColumns::userId).data().toInt());
+        q.bindValue(":userId", userId);
     }
 
-    q.bindValue(":dateFrom", m_deDateFrom->date());
-    q.bindValue(":dateTo", m_deDateTo->date());
+    q.bindValue(":dateFrom", dateFrom);
+    q.bindValue(":dateTo", dateTo);
+    q.bindValue(":usedDays", usedDays);
 
 
     if(!q.exec()) {
