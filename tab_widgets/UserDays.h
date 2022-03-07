@@ -8,7 +8,8 @@ enum EALDays{
     name,
     year,
     days,
-    id
+    id,
+    remainingDays
 };
 }
 

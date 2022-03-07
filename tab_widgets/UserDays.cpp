@@ -17,14 +17,17 @@ static const char* USER = "User";
 static const char* DAYS = "Days";
 static const char* YEAR = "Year";
 static const char* NAME = "Name";
+static const char* REMAINING_DAYS = "Remaining days";
 
 
 static const char* DELETE_TITLE = "Delete";
 static const char* DELETE_MSG = "Are you sure you want to delete this record?";
-static const char* MODEL_QUERY = "SELECT u.first_name || ' ' || u.last_name, ud.year, ud.days, ud.id "
+static const char* MODEL_QUERY = "SELECT u.first_name || ' ' || u.last_name, ud.year, ud.days, ud.id, ud.days - sum(ald.used_days) "
                                  "FROM user_days ud "
                                  "INNER JOIN users u on u.id = ud.user_id "
-                                 "WHERE ud.year = :year;";
+                                 "INNER JOIN annual_leave_days ald on u.id = ald.user_id AND ud.year = EXTRACT(year FROM ald.date_from) "
+                                 "WHERE ud.year = :year "
+                                 "GROUP BY u.first_name, u.last_name, ud.year, ud.days, ud.id;";
 
 static const char* DELETE_UD_QUERY = "DELETE FROM user_days WHERE id = :udId";
 
@@ -59,11 +62,11 @@ void UserDays::setupModelView()
     });
     m_table->hideColumn(id);
 
-
     m_model->setHeaderData(name, Qt::Horizontal, NAME);
     m_model->setHeaderData(year, Qt::Horizontal, YEAR);
     m_model->setHeaderData(days, Qt::Horizontal, DAYS);
     m_model->setHeaderData(id, Qt::Horizontal, USER);
+    m_model->setHeaderData(remainingDays, Qt::Horizontal, REMAINING_DAYS);
 }
 
 void UserDays::setModelQuery()
