@@ -37,6 +37,13 @@ void MainWindow::setupUi()
     tabWidget->addTab(holidays, "Holidays");
     tabWidget->addTab(alDays, "Annual Leave Days");
 
+    connect(tabWidget, &QTabWidget::currentChanged, this, [userDays] (int index) {
+        //NOTE update user days table if annual leave was added
+        if(index == 1) {
+            userDays->setModelQuery();
+        }
+    });
+
     layout->addWidget(tabWidget);
 
     mainWidget->setLayout(layout);

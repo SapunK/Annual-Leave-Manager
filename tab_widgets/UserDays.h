@@ -21,9 +21,10 @@ class UserDays : public CustomTabWidget
 public:
     explicit UserDays(QWidget *parent = nullptr);
 
+    void setModelQuery();
+
 private:
     void setupModelView();
-    void setModelQuery();
 
     QSpinBox *m_sbYear;
 

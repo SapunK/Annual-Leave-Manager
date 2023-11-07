@@ -2,7 +2,6 @@
 
 #include <QPushButton>
 #include <QSqlQuery>
-#include <QSqlQueryModel>
 #include <QMessageBox>
 #include <QSpinBox>
 #include <QToolBar>
@@ -10,6 +9,8 @@
 
 #include "custom_widgets/CustomTableView.h"
 #include "dialogs/AddModifyALDays.h"
+#include "util/EALDTableColumns.h"
+#include "models/ALDSqlQModel.h"
 
 namespace ALDays_NS {
 static const char* MODEL_QUERY = "SELECT ald.id, u.first_name || ' ' || u.last_name, "
@@ -45,6 +46,7 @@ AnnualLeaveDays::AnnualLeaveDays(QWidget *parent)
 
 void AnnualLeaveDays::setupModelView()
 {
+    m_model = new ALDSqlQModel(this);
     setModelQuery();
     m_table->setModel(m_model);
     m_table->resizeColumnsToContents();

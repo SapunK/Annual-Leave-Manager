@@ -3,14 +3,6 @@
 
 #include "custom_widgets/CustomTabWidget.h"
 
-namespace Holiday_NS {
-enum EHolidayColumns{
-    id,
-    date,
-    description
-};
-}
-
 class QSpinBox;
 
 class Holidays : public CustomTabWidget

@@ -4,13 +4,6 @@
 #include <QDialog>
 
 namespace AddModifyALDays_NS {
-enum EALDTableColumns {
-    id,
-    user,
-    dateFrom,
-    dateTo,
-    usedDays
-};
 
 enum EUserColumns{
     userNameLastname,

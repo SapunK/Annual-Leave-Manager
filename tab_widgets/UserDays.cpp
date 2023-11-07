@@ -22,10 +22,11 @@ static const char* REMAINING_DAYS = "Remaining days";
 
 static const char* DELETE_TITLE = "Delete";
 static const char* DELETE_MSG = "Are you sure you want to delete this record?";
-static const char* MODEL_QUERY = "SELECT u.first_name || ' ' || u.last_name, ud.year, ud.days, ud.id, ud.days - sum(ald.used_days) "
+static const char* MODEL_QUERY = "SELECT u.first_name || ' ' || u.last_name, ud.year, ud.days, ud.id, "
+                                 "CASE WHEN sum(ald.used_days) > 0 THEN ud.days - sum(ald.used_days) ELSE ud.days END  "
                                  "FROM user_days ud "
                                  "INNER JOIN users u on u.id = ud.user_id "
-                                 "INNER JOIN annual_leave_days ald on u.id = ald.user_id AND ud.year = EXTRACT(year FROM ald.date_from) "
+                                 "LEFT JOIN annual_leave_days ald on u.id = ald.user_id AND ud.year = EXTRACT(year FROM ald.date_from) "
                                  "WHERE ud.year = :year "
                                  "GROUP BY u.first_name, u.last_name, ud.year, ud.days, ud.id;";
 
@@ -55,7 +56,6 @@ void UserDays::setupModelView()
 {
     setModelQuery();
     m_table->setModel(m_model);
-    m_table->resizeColumnsToContents();
     connect(m_table->selectionModel(), &QItemSelectionModel::selectionChanged, this, [this]{
         m_pbModify->setEnabled(m_table->currentIndex().isValid());
         m_pbDelete->setEnabled(m_table->currentIndex().isValid());
@@ -67,6 +67,7 @@ void UserDays::setupModelView()
     m_model->setHeaderData(days, Qt::Horizontal, DAYS);
     m_model->setHeaderData(id, Qt::Horizontal, USER);
     m_model->setHeaderData(remainingDays, Qt::Horizontal, REMAINING_DAYS);
+    m_table->resizeColumnsToContents();
 }
 
 void UserDays::setModelQuery()

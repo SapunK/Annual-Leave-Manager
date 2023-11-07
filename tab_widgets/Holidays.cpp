@@ -2,7 +2,6 @@
 
 #include <QPushButton>
 #include <QSqlQuery>
-#include <QSqlQueryModel>
 #include <QMessageBox>
 #include <QSpinBox>
 #include <QToolBar>
@@ -10,6 +9,7 @@
 
 #include "custom_widgets/CustomTableView.h"
 #include "dialogs/AddModifyHoliday.h"
+#include "models/HolidaySqlQModel.h"
 
 namespace Holiday_NS {
     static const char* DESCRIPTION = "Description";
@@ -42,6 +42,7 @@ Holidays::Holidays(QWidget *parent)
 
 void Holidays::setupModelView()
 {
+    m_model = new HolidaySqlQModel(this);
     setModelQuery();
     m_table->setModel(m_model);
     m_table->resizeColumnsToContents();

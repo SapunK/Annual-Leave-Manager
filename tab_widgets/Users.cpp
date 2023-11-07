@@ -1,12 +1,12 @@
 #include "Users.h"
 
 #include <QSqlQuery>
-#include <QSqlQueryModel>
 #include <QMessageBox>
 #include <QPushButton>
 
 #include "custom_widgets/CustomTableView.h"
 #include "dialogs/AddModifyUser.h"
+#include "models/UserSqlQModel.h"
 
 namespace Users_NS {
 static const char* FIRST_NAME = "First name";
@@ -40,9 +40,9 @@ Users::Users(QWidget *parent)
 
 void Users::setupModelView()
 {
+    m_model = new UserSqlQModel(this);
     m_model->setQuery(MODEL_QUERY);
     m_table->setModel(m_model);
-    m_table->resizeColumnsToContents();
     m_table->hideColumn(id);
 
     connect(m_table->selectionModel(), &QItemSelectionModel::selectionChanged, this, [this] {
@@ -58,6 +58,7 @@ void Users::setupModelView()
     m_model->setHeaderData(dateEmployment, Qt::Horizontal, DATE_EMPLOYMENT);
     m_model->setHeaderData(gender, Qt::Horizontal, GENDER);
     m_model->setHeaderData(roleName, Qt::Horizontal, ROLE_NAME);
+    m_table->resizeColumnsToContents();
 }
 
 void Users::setModelQuery()

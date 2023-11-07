@@ -14,13 +14,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     custom_widgets/CustomTabWidget.cpp \
     custom_widgets/CustomTableView.cpp \
+    models/ALDSqlQModel.cpp \
+    models/HolidaySqlQModel.cpp \
+    models/UserSqlQModel.cpp \
     dialogs/AddModifyALDays.cpp \
     dialogs/AddModifyHoliday.cpp \
     dialogs/AddModifyUser.cpp \
     dialogs/AddModifyUserDays.cpp \
     main.cpp \
     mainwindow.cpp \
-    models/test.cpp \
     tab_widgets/AnnualLeaveDays.cpp \
     tab_widgets/Holidays.cpp \
     tab_widgets/UserDays.cpp \
@@ -32,6 +34,9 @@ SOURCES += \
 HEADERS += \
     custom_widgets/CustomTabWidget.h \
     custom_widgets/CustomTableView.h \
+    models/ALDSqlQModel.h \
+    models/HolidaySqlQModel.h \
+    models/UserSqlQModel.h \
     dialogs/AddModifyALDays.h \
     dialogs/AddModifyHoliday.h \
     dialogs/AddModifyUser.h \
@@ -42,6 +47,7 @@ HEADERS += \
     tab_widgets/UserDays.h \
     tab_widgets/Users.h \
     util/DB_Functions.h \
+    util/EALDTableColumns.h \
     util/HelperFunctions.h \
     util/appconsts.h
 

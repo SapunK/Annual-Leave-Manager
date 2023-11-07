@@ -7,10 +7,11 @@
 #include <QPushButton>
 #include <QSqlQuery>
 #include <QSqlQueryModel>
-#include <QDebug>
 #include <QSqlError>
+#include <QDebug>
 
 #include "util/HelperFunctions.h"
+#include "util/EALDTableColumns.h"
 
 namespace AddModifyALDays_NS {
 static const char* ALD_TITLE = "Annual Leave Days";
